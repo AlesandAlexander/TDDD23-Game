@@ -62,7 +62,7 @@ function enemy.new(position)    -- constructor
         animation.position = pos
         animation:setFrame( pos+1 )
 
-        ---Positions:--
+        ------Positions------
         ----------4----------
         ------3-------5------
         --2---------------6--
