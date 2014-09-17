@@ -24,8 +24,7 @@ end
 -------------------------------------------------
  
 function enemy.new(position)    -- constructor
-    local self = display.newGroup()
-    self.x = _W/2
+    --local self = display.newGroup()
 
     local myImageSheet = graphics.newImageSheet( "branchsheet.png", sheetInfo:getSheet() )
     local sequenceData = {
@@ -40,42 +39,56 @@ function enemy.new(position)    -- constructor
     }
 
     local animation = display.newSprite( myImageSheet, sequenceData )
-    self:insert(animation)
-    self.animation = animation
+    animation.x = _W/2
 
 
-    function self:rotateRight()
+    function animation:rotateRight()
         local function right()
-            self:setPosition((self.position + 1) % 8)        
+            animation:setPosition((animation.position + 1) % 8)        
         end
         right()
         timer.performWithDelay( 120, right)
     end
 
-    function self:rotateLeft()
+    function animation:rotateLeft()
         local function left()
-            self:setPosition((self.position - 1) % 8)
+            animation:setPosition((animation.position - 1) % 8)
         end
         left()
         timer.performWithDelay( 120, left)
     end
 
-    function self:setPosition(pos)
-        self.position = pos
-        self.animation:setFrame( pos+1 )
+    function animation:setPosition(pos)
+        animation.position = pos
+        animation:setFrame( pos+1 )
+
+        ---Positions:--
+        ----------4----------
+        ------3-------5------
+        --2---------------6--
+        ------1-------7------
+        ----------0----------
+
+        -- if pos == 0 or pos == 1 or pos == 7 then
+        --     animation.x = _W/2
+        -- elseif pos <= 4 then
+        --     animation.x = _W/2 - 110
+        -- elseif pos > 4 then
+        --     animation.x = _W/2 + 110
+        -- end
 
         if pos == 0 then
-            self.x = _W/2
+            animation.x = _W/2
         elseif pos <= 4 then
-            self.x = _W/2 - 110
+            animation.x = _W/2 - 110
         elseif pos > 4 then
-            self.x = _W/2 + 110
+            animation.x = _W/2 + 110
         end
     end
 
-    self:setPosition(position*2)
+    animation:setPosition(position*2)
 
-    return self
+    return animation
 
 end
 

@@ -7,6 +7,7 @@ local enemy = require("branch")
 _Group = display.newGroup()
 _Items = {}
 physics = require("physics")
+physics.setDrawMode( "hybrid" )
 physics.start()
 
 physics.setGravity( 0, 0 )
@@ -40,6 +41,7 @@ function scene:createScene( event )
     -----------------------------------------------------------------------------
 
     local myBranch = enemy.new(math.random(0,3))
+    myBranch.y = _H+100
     local player = display.newRect( _W/2, _H-100, 30, 30 )
     local left = display.newRect( _W/4, _H/2, _W/2, _H )
     local right = display.newRect( _W-_W/4, _H/2, _W/2, _H )
@@ -51,25 +53,35 @@ function scene:createScene( event )
             myBranch:rotateRight()
             --turnRight()
         end
-
     end
     local function leftClick( event )
-
         if (event.phase == "began") then
             myBranch:rotateLeft()
             --turnLeft()
         end
+    end
 
+    local function onLocalCollision(self, event)
+        if (event.phase == "began") then
+            print("hit")
+        end
     end
 
 
     right:addEventListener( "touch", rightClick )
     left:addEventListener( "touch", leftClick )
 
-    -- physics.addBody( enemy, "static")
-    -- physics.addBody( player, "dynamic", {isSensor=true})
-    -- player.collision = onLocalCollision
-    -- player:addEventListener( "collision", player )
+    physics.addBody( myBranch, "dynamic", {isSensor=true, box={halfWidth=80, halfHeight=30}})
+    physics.addBody( player, "dynamic", {isSensor=true})
+
+    player.collision = onLocalCollision
+    player:addEventListener( "collision", player )
+
+    local function moveBranch()
+        transition.from( myBranch, {y=0, time= 2000, onComplete = moveBranch} )
+    end
+    moveBranch()
+
 
 end
 
