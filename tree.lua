@@ -3,6 +3,7 @@ local tree = require("treeSprite")
 
 local Tree = display.newGroup( )
 
+local rotateSpeed = 0;
 
 local treePartOne = display.newImageRect( Tree, "tree.png", 120, 480 )
 treePartOne.x = _W/2
@@ -61,26 +62,57 @@ local function scroll(event)
 		treePartFour.y = -_H*0.5
 	end
 
-	treePartOne.x = treePartOne.x -2
-	treePartTwo.x = treePartTwo.x -2
-	treePartThree.x = treePartThree.x -2
-	treePartFour.x = treePartFour.x -2
-	if treePartOne.x <= ((_W/2) - 120) then
-		treePartOne.x = _W/2 + 120
+	treePartOne.x = treePartOne.x + rotateSpeed
+	treePartTwo.x = treePartTwo.x + rotateSpeed
+	treePartThree.x = treePartThree.x + rotateSpeed
+	treePartFour.x = treePartFour.x + rotateSpeed
+	if rotateSpeed < 0 then
+		if treePartOne.x <= ((_W/2) - 120) then
+			treePartOne.x = _W/2 + 120
+		end
+		if treePartTwo.x <= ((_W/2) - 120) then
+			treePartTwo.x = _W/2 + 120
+		end
+		if treePartThree.x <= ((_W/2) - 120) then
+			treePartThree.x = _W/2 + 120
+		end
+		if treePartFour.x <= ((_W/2) - 120) then
+			treePartFour.x = _W/2 + 120
+		end
 	end
-	if treePartTwo.x <= ((_W/2) - 120) then
-		treePartTwo.x = _W/2 + 120
+	if rotateSpeed > 0 then
+		if treePartOne.x >= ((_W/2) + 120) then
+			treePartOne.x = _W/2 - 120
+		end
+		if treePartTwo.x >= ((_W/2) + 120) then
+			treePartTwo.x = _W/2 - 120
+		end
+		if treePartThree.x >= ((_W/2) + 120) then
+			treePartThree.x = _W/2 - 120
+		end
+		if treePartFour.x >= ((_W/2) + 120) then
+			treePartFour.x = _W/2 - 120
+		end
 	end
-	if treePartThree.x <= ((_W/2) - 120) then
-		treePartThree.x = _W/2 + 120
-	end
-	if treePartFour.x <= ((_W/2) - 120) then
-		treePartFour.x = _W/2 + 120
-	end
-
 end
 
 Runtime:addEventListener( "enterFrame", scroll )
+
+function rotateRight()
+	rotateSpeed = -6
+	local function stopRotation()
+		rotateSpeed = 0
+	end
+	timer.performWithDelay( 120, stopRotation)
+end	
+
+function rotateLeft()
+	rotateSpeed = 6
+	local function stopRotation()
+		rotateSpeed = 0
+	end
+	timer.performWithDelay( 120, stopRotation)
+end	
 
 local shadow = display.newImageRect( "shadow.png", 120, 480 )
 shadow.x = _W/2

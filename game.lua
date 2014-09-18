@@ -52,12 +52,14 @@ function scene:createScene( event )
     local function rightClick( event )
         if (event.phase == "began") then        
             myBranch:rotateRight()
+            rotateRight()
             --turnRight()
         end
     end
     local function leftClick( event )
         if (event.phase == "began") then
             myBranch:rotateLeft()
+            rotateLeft()
             --turnLeft()
         end
     end
