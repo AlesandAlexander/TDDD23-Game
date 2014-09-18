@@ -99,7 +99,7 @@ end
 Runtime:addEventListener( "enterFrame", scroll )
 
 function rotateRight()
-	rotateSpeed = -6
+	rotateSpeed = -12
 	local function stopRotation()
 		rotateSpeed = 0
 	end
@@ -107,7 +107,7 @@ function rotateRight()
 end	
 
 function rotateLeft()
-	rotateSpeed = 6
+	rotateSpeed = 12
 	local function stopRotation()
 		rotateSpeed = 0
 	end
