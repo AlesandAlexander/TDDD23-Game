@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 display.setStatusBar( display.HiddenStatusBar )
 _W = display.contentWidth
 _H = display.contentHeight
@@ -123,4 +124,12 @@ end
 
 
 init()
+=======
+local storyboard = require "storyboard"
+storyboard.purgeOnSceneChange = true
 
+_W = display.contentWidth
+_H = display.contentHeight
+>>>>>>> origin/master
+
+storyboard.gotoScene( "game" )
