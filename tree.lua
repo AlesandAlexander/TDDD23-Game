@@ -115,6 +115,7 @@ function rotateLeft()
 end	
 
 local shadow = display.newImageRect( "shadow.png", 120, 480 )
+Tree:insert(shadow)
 shadow.x = _W/2
 shadow.y = _H/2
 
