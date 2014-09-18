@@ -59,30 +59,32 @@ function enemy.new(position)    -- constructor
     end
 
     function animation:setPosition(pos)
-        animation.position = pos
-        animation:setFrame( pos+1 )
+        if not animation.isRemoved then
+            animation.position = pos
+            animation:setFrame( pos+1 )
 
-        ------Positions------
-        ----------4----------
-        ------3-------5------
-        --2---------------6--
-        ------1-------7------
-        ----------0----------
+            ------Positions------
+            ----------4----------
+            ------3-------5------
+            --2---------------6--
+            ------1-------7------
+            ----------0----------
 
-        -- if pos == 0 or pos == 1 or pos == 7 then
-        --     animation.x = _W/2
-        -- elseif pos <= 4 then
-        --     animation.x = _W/2 - 110
-        -- elseif pos > 4 then
-        --     animation.x = _W/2 + 110
-        -- end
+            -- if pos == 0 or pos == 1 or pos == 7 then
+            --     animation.x = _W/2
+            -- elseif pos <= 4 then
+            --     animation.x = _W/2 - 110
+            -- elseif pos > 4 then
+            --     animation.x = _W/2 + 110
+            -- end
 
-        if pos == 0 then
-            animation.x = _W/2
-        elseif pos <= 4 then
-            animation.x = _W/2 - 110
-        elseif pos > 4 then
-            animation.x = _W/2 + 110
+            if pos == 0 then
+                animation.x = _W/2
+            elseif pos <= 4 then
+                animation.x = _W/2 - 110
+            elseif pos > 4 then
+                animation.x = _W/2 + 110
+            end
         end
     end
 

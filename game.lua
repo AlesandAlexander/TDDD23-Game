@@ -68,16 +68,14 @@ function scene:createScene( event )
 
     local function onPlayerCollision(self, event)
         if (event.phase == "began") then
-            print("hit")
+            --print("hit")
         end
     end
 
     local function onDespawnerCollision(self, event)
         if (event.phase == "began") then
-            print( branchGroup.numChildren )
             display.remove( event.other )
-            print( branchGroup.numChildren )
-
+            event.other.isRemoved = true
         end
     end
 
@@ -96,10 +94,13 @@ function scene:createScene( event )
 
 
     local function spawnBranch()
-        local branch = enemy.new(math.random(0,3))
-        branch.y = -100
-        physics.addBody( branch, "dynamic", {isSensor=true, box={halfWidth=80, halfHeight=30}})
-        branchGroup:insert(branch)
+        local numberToSpawn = math.random(0,3)
+        for i=1,numberToSpawn do
+            local branch = enemy.new(math.random(0,3))
+            branch.y = -100
+            physics.addBody( branch, "dynamic", {isSensor=true, box={halfWidth=80, halfHeight=30}})
+            branchGroup:insert(branch)
+        end
     end
 
 
