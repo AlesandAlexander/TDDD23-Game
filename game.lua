@@ -41,8 +41,10 @@ function scene:createScene( event )
     -----------------------------------------------------------------------------
 
     local tree = require("tree")
-    local myBranch = enemy.new(math.random(0,3))
-    myBranch.y = _H+100
+    group:insert(tree)
+    local branchGroup = display.newGroup( )
+    group:insert(branchGroup)
+    local despawner = display.newRect( _W/2, _H+200, _W, 100 )
     local player = display.newRect( _W/2, _H-100, 30, 30 )
     local left = display.newRect( _W/4, _H/2, _W/2, _H )
     local right = display.newRect( _W-_W/4, _H/2, _W/2, _H )
@@ -50,21 +52,32 @@ function scene:createScene( event )
     left.alpha = 0.01
 
     local function rightClick( event )
-        if (event.phase == "began") then        
-            myBranch:rotateRight()
-            --turnRight()
+        if (event.phase == "began") then      
+            for i=branchGroup.numChildren, 1, -1 do
+               branchGroup[i]:rotateRight()
+            end
         end
     end
     local function leftClick( event )
         if (event.phase == "began") then
-            myBranch:rotateLeft()
-            --turnLeft()
+            for i=branchGroup.numChildren, 1, -1 do
+               branchGroup[i]:rotateLeft()
+            end
         end
     end
 
-    local function onLocalCollision(self, event)
+    local function onPlayerCollision(self, event)
         if (event.phase == "began") then
             print("hit")
+        end
+    end
+
+    local function onDespawnerCollision(self, event)
+        if (event.phase == "began") then
+            print( branchGroup.numChildren )
+            display.remove( event.other )
+            print( branchGroup.numChildren )
+
         end
     end
 
@@ -72,16 +85,38 @@ function scene:createScene( event )
     right:addEventListener( "touch", rightClick )
     left:addEventListener( "touch", leftClick )
 
-    physics.addBody( myBranch, "dynamic", {isSensor=true, box={halfWidth=80, halfHeight=30}})
     physics.addBody( player, "dynamic", {isSensor=true})
+    physics.addBody( despawner, "dynamic", {isSensor=true})
 
-    player.collision = onLocalCollision
+    player.collision = onPlayerCollision
     player:addEventListener( "collision", player )
 
-    local function moveBranch()
-        transition.from( myBranch, {y=0, time= 2000, onComplete = moveBranch} )
+    despawner.collision = onDespawnerCollision
+    despawner:addEventListener( "collision", despawner )
+
+
+    local function spawnBranch()
+        local branch = enemy.new(math.random(0,3))
+        branch.y = -100
+        physics.addBody( branch, "dynamic", {isSensor=true, box={halfWidth=80, halfHeight=30}})
+        branchGroup:insert(branch)
     end
-    moveBranch()
+
+
+    local function gameLoop() 
+        for i=branchGroup.numChildren, 1, -1 do
+          local branch = branchGroup[i]
+          branch.y = branch.y + 10
+        end
+    end
+
+    timer.performWithDelay( 500, spawnBranch, 0)
+    Runtime:addEventListener( "enterFrame", gameLoop )
+
+    -- local function moveBranch()
+    --     transition.from( myBranch, {y=0, time= 2000, onComplete = moveBranch} )
+    -- end
+    -- moveBranch()
 
 
 end
