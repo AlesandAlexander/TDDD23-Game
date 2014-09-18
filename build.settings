@@ -5,10 +5,6 @@ settings =
 		default = "portrait",
 		supported =
  		{
-<<<<<<< HEAD
-			"portraitUpsideDown",
-=======
->>>>>>> origin/master
 			"portrait"
  		}
 	}
