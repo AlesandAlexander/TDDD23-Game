@@ -51,49 +51,38 @@ local function scroll(event)
 	treePartFour.y = treePartFour.y + 10
 	if treePartOne.y >= 720 then
 		treePartOne.y = -_H*0.5
+		treePartThree.y = -_H*0.5
 	end
 	if treePartTwo.y >= 720 then
 		treePartTwo.y = -_H*0.5
-	end
-	if treePartThree.y >= 720 then
-		treePartThree.y = -_H*0.5
-	end
-	if treePartFour.y >= 720 then
 		treePartFour.y = -_H*0.5
 	end
 
-	treePartOne.x = treePartOne.x + rotateSpeed
-	treePartTwo.x = treePartTwo.x + rotateSpeed
-	treePartThree.x = treePartThree.x + rotateSpeed
-	treePartFour.x = treePartFour.x + rotateSpeed
+	
 	if rotateSpeed < 0 then
 		if treePartOne.x <= ((_W/2) - 120) then
 			treePartOne.x = _W/2 + 120
-		end
-		if treePartTwo.x <= ((_W/2) - 120) then
 			treePartTwo.x = _W/2 + 120
 		end
 		if treePartThree.x <= ((_W/2) - 120) then
 			treePartThree.x = _W/2 + 120
-		end
-		if treePartFour.x <= ((_W/2) - 120) then
 			treePartFour.x = _W/2 + 120
 		end
 	end
 	if rotateSpeed > 0 then
 		if treePartOne.x >= ((_W/2) + 120) then
 			treePartOne.x = _W/2 - 120
-		end
-		if treePartTwo.x >= ((_W/2) + 120) then
 			treePartTwo.x = _W/2 - 120
 		end
 		if treePartThree.x >= ((_W/2) + 120) then
 			treePartThree.x = _W/2 - 120
-		end
-		if treePartFour.x >= ((_W/2) + 120) then
 			treePartFour.x = _W/2 - 120
 		end
 	end
+	treePartOne.x = treePartOne.x + rotateSpeed
+	treePartTwo.x = treePartTwo.x + rotateSpeed
+	treePartThree.x = treePartThree.x + rotateSpeed
+	treePartFour.x = treePartFour.x + rotateSpeed
 end
 
 Runtime:addEventListener( "enterFrame", scroll )
