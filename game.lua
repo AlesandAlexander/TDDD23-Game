@@ -45,18 +45,21 @@ function scene:createScene( event )
     local branchGroup = display.newGroup( )
     group:insert(branchGroup)
     local despawner = display.newRect( _W/2, _H+200, _W, 100 )
-    local player = display.newRect( _W/2, _H-100, 30, 30 )
     local left = display.newRect( _W/4, _H/2, _W/2, _H )
     local right = display.newRect( _W-_W/4, _H/2, _W/2, _H )
     right.alpha = 0.01
     left.alpha = 0.01
+
+    local player = require("player")
+    --group:insert(test)
 
     local function rightClick( event )
         if (event.phase == "began") then        
             for i=branchGroup.numChildren, 1, -1 do
                branchGroup[i]:rotateRight()
             end
-            rotateRight()
+            treeRotateRight()
+            playerRotateRight()
             --turnRight()
         end
     end
@@ -65,7 +68,8 @@ function scene:createScene( event )
             for i=branchGroup.numChildren, 1, -1 do
                branchGroup[i]:rotateLeft()
             end
-            rotateLeft()
+            treeRotateLeft()
+            playerRotateLeft()
             --turnLeft()
         end
     end

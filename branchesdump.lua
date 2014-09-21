@@ -42,7 +42,7 @@ local function turnLeft()
 		animation:setFrame( currentFrame + 1 )
 	end
 	left()
-	timer.performWithDelay( 150, left)
+	timer.performWithDelay( rotateTime, left)
 end
 
 local function turnRight()
@@ -51,7 +51,7 @@ local function turnRight()
 		animation:setFrame( currentFrame - 1 )
 	end
 	right()
-	timer.performWithDelay( 150, right)
+	timer.performWithDelay( rotateTime, right)
 end
 
 

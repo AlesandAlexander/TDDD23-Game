@@ -1,6 +1,4 @@
 
-local tree = require("treeSprite")
-
 local Tree = display.newGroup( )
 
 local rotateSpeed = 0;
@@ -87,20 +85,20 @@ end
 
 Runtime:addEventListener( "enterFrame", scroll )
 
-function rotateRight()
-	rotateSpeed = -12
+function treeRotateRight()
+	rotateSpeed = -6
 	local function stopRotation()
 		rotateSpeed = 0
 	end
-	timer.performWithDelay( 120, stopRotation)
+	timer.performWithDelay( rotateTime, stopRotation)
 end	
 
-function rotateLeft()
-	rotateSpeed = 12
+function treeRotateLeft()
+	rotateSpeed = 6
 	local function stopRotation()
 		rotateSpeed = 0
 	end
-	timer.performWithDelay( 120, stopRotation)
+	timer.performWithDelay( rotateTime, stopRotation)
 end	
 
 local shadow = display.newImageRect( "shadow.png", 120, 480 )
