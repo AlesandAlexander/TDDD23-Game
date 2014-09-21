@@ -39,7 +39,8 @@ function scene:createScene( event )
     --      Example use-case: Restore 'group' from previously saved state.
 
     -----------------------------------------------------------------------------
-
+    local rightClick
+    local leftClick
     local background = require("background")
     group:insert(background)
     local tree = require("tree")
@@ -55,26 +56,56 @@ function scene:createScene( event )
     local player = require("player")
     --group:insert(test)
 
-    local function rightClick( event )
-        if (event.phase == "began") then        
-            for i=branchGroup.numChildren, 1, -1 do
-               branchGroup[i]:rotateRight()
+    local function unLock()
+        locked = false
+        if nextAction == 1 then
+            local fakeEvent = {phase="began"}
+            leftClick(fakeEvent)  
+        elseif nextAction == 2 then
+            local fakeEvent = {phase="began"}
+            rightClick(fakeEvent)
+
+        end
+        nextAction = 0
+    end
+
+    function rightClick( event )
+        if (event.phase == "began") then
+            print( "in first if" )         
+            if not locked then        
+                print( "in second if" )         
+                locked = true
+
+                for i=branchGroup.numChildren, 1, -1 do
+                   branchGroup[i]:rotateRight()
+                end
+                treeRotateRight()
+                background:rotateRight()
+                playerRotateRight()
+                timer.performWithDelay( rotateTime, unLock )
+                --turnRight()
+            else
+                nextAction = 2
             end
-            treeRotateRight()
-            background:rotateRight()
-            playerRotateRight()
-            --turnRight()
         end
     end
-    local function leftClick( event )
+
+    function leftClick( event )
         if (event.phase == "began") then
-            for i=branchGroup.numChildren, 1, -1 do
-               branchGroup[i]:rotateLeft()
+            if not locked then
+                locked = true
+
+                for i=branchGroup.numChildren, 1, -1 do
+                   branchGroup[i]:rotateLeft()
+                end
+                treeRotateLeft()
+                background:rotateLeft()
+                playerRotateLeft()
+                timer.performWithDelay( rotateTime, unLock )
+                --turnLeft()
+            else
+                nextAction = 1
             end
-            treeRotateLeft()
-            background:rotateLeft()
-            playerRotateLeft()
-            --turnLeft()
         end
     end
 
