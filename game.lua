@@ -40,6 +40,8 @@ function scene:createScene( event )
 
     -----------------------------------------------------------------------------
 
+    local background = require("background")
+    group:insert(background)
     local tree = require("tree")
     group:insert(tree)
     local branchGroup = display.newGroup( )
@@ -59,6 +61,7 @@ function scene:createScene( event )
                branchGroup[i]:rotateRight()
             end
             treeRotateRight()
+            background:rotateRight()
             playerRotateRight()
             --turnRight()
         end
@@ -69,6 +72,7 @@ function scene:createScene( event )
                branchGroup[i]:rotateLeft()
             end
             treeRotateLeft()
+            background:rotateLeft()
             playerRotateLeft()
             --turnLeft()
         end

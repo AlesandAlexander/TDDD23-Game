@@ -2,24 +2,24 @@ local image = display.newImageRect( "bg.png", _W*9, _H )
 image.anchorX=1
 image.x = _W
 image.y =_H/2
-local rotationSpeed = 120
+local rotationSpeed = 70
 local scrollSpeed = 0
 
 
 function image:rotateRight()
-	scrollSpeed = -rotationSpeed
-	local function stopRotation()
-		scrollSpeed = 0
-	end
-	timer.performWithDelay( 120, stopRotation)
-end	
-
-function image:rotateLeft()
 	scrollSpeed = rotationSpeed
 	local function stopRotation()
 		scrollSpeed = 0
 	end
-	timer.performWithDelay( 120, stopRotation)
+	timer.performWithDelay( rotateTime, stopRotation)
+end	
+
+function image:rotateLeft()
+	scrollSpeed = -rotationSpeed
+	local function stopRotation()
+		scrollSpeed = 0
+	end
+	timer.performWithDelay( rotateTime, stopRotation)
 end	
 
 
