@@ -13,4 +13,4 @@ locked = false
 nextAction = 0
 
 
-storyboard.gotoScene( "game" )
+storyboard.gotoScene( "menu" )
