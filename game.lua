@@ -2,8 +2,7 @@ local storyboard = require( "storyboard" )
 scene = storyboard.newScene()
 
 display.setStatusBar( display.HiddenStatusBar )
-local enemy = require("branch")
-
+    
 _Group = display.newGroup()
 _Items = {}
 physics = require("physics")
@@ -45,8 +44,6 @@ function scene:createScene( event )
     group:insert(background)
     local tree = require("tree")
     group:insert(tree)
-    local branchGroup = display.newGroup( )
-    group:insert(branchGroup)
     local despawner = display.newRect( _W/2, _H+200, _W, 100 )
     local left = display.newRect( _W/4, _H/2, _W/2, _H )
     local right = display.newRect( _W-_W/4, _H/2, _W/2, _H )
@@ -54,6 +51,9 @@ function scene:createScene( event )
     left.alpha = 0.01
 
     local player = require("player")
+    group:insert(player)
+
+    local endGame
 
     local function unLock()
         if nextAction == 1 then
@@ -70,13 +70,7 @@ function scene:createScene( event )
         if (event.phase == "began") then 
             if not locked then            
                 locked = true
-                for i=branchGroup.numChildren, 1, -1 do
-                   branchGroup[i]:rotateRight()
-                end
-                treeRotateRight()
-                background:rotateRight()
-                playerRotateRight()
-                timer.performWithDelay( rotateTime+50, unLock )
+                runRight()
             else
                 nextAction = 2
             end
@@ -87,13 +81,7 @@ function scene:createScene( event )
         if (event.phase == "began") then
             if not locked then
                 locked = true
-                for i=branchGroup.numChildren, 1, -1 do
-                   branchGroup[i]:rotateLeft()
-                end
-                treeRotateLeft()
-                background:rotateLeft()
-                playerRotateLeft()
-                timer.performWithDelay( rotateTime+50, unLock )
+                runLeft()
             else
                 nextAction = 1
             end
@@ -101,20 +89,14 @@ function scene:createScene( event )
     end
 
     function runRight()
-        for i=branchGroup.numChildren, 1, -1 do
-           branchGroup[i]:rotateRight()
-        end
-        treeRotateRight()
+        tree:rotateRight()
         background:rotateRight()
         playerRotateRight()
         timer.performWithDelay( rotateTime+50, unLock )
     end
 
     function runLeft()
-        for i=branchGroup.numChildren, 1, -1 do
-           branchGroup[i]:rotateLeft()
-        end
-        treeRotateLeft()
+        tree:rotateLeft()
         background:rotateLeft()
         playerRotateLeft()
         timer.performWithDelay( rotateTime+50, unLock )
@@ -130,7 +112,7 @@ function scene:createScene( event )
 
     local function onPlayerCollision(self, event)
         if (event.phase == "began") then
-            --print("hit")
+            endGame()
         end
     end
 
@@ -138,7 +120,7 @@ function scene:createScene( event )
     right:addEventListener( "touch", rightClick )
     left:addEventListener( "touch", leftClick )
 
-    physics.addBody( player, "dynamic", {isSensor=true})
+    physics.addBody( player, "dynamic", {isSensor=true, box={halfWidth=10, halfHeight=10}})
     physics.addBody( despawner, "dynamic", {isSensor=true})
 
     player.collision = onPlayerCollision
@@ -147,26 +129,18 @@ function scene:createScene( event )
     despawner.collision = onDespawnerCollision
     despawner:addEventListener( "collision", despawner )
 
-    local function spawnBranch()
-        local numberToSpawn = math.random(0,3)
-        for i=1,numberToSpawn do
-            local branch = enemy.new(math.random(0,3))
-            branch.y = -100
-            physics.addBody( branch, "dynamic", {isSensor=true, box={halfWidth=80, halfHeight=30}})
-            branchGroup:insert(branch)
-        end
+    tree:start(10, 20)
+
+    local function dispose()
+        Runtime:removeEventListener( "enterFrame", gameLoop )
     end
 
-
-    local function gameLoop() 
-        for i=branchGroup.numChildren, 1, -1 do
-          local branch = branchGroup[i]
-          branch.y = branch.y + 10
-        end
+    function endGame()
+        background:dispose()
+        tree:dispose()
+        dispose()
+        storyboard.gotoScene( "menu")
     end
-
-    timer.performWithDelay( 500, spawnBranch, 0)
-    Runtime:addEventListener( "enterFrame", gameLoop )
 
 end
 

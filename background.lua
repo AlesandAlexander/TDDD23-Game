@@ -35,5 +35,10 @@ end
 
 Runtime:addEventListener( "enterFrame", scroll )
 
+function image:dispose()
+	Runtime:removeEventListener( "enterFrame", scroll )
+end
+
+
 
 return image
