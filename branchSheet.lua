@@ -1,7 +1,7 @@
 --
 -- created with TexturePacker (http://www.codeandweb.com/texturepacker)
 --
--- $TexturePacker:SmartUpdate:a02532ffed77600a0ff835500a617d0d:ff54539fe804419254277b54e283bb60:c4ac6a637758d88d82c8ffc4d9ff9b20$
+-- $TexturePacker:SmartUpdate:f2729ff18cc24245d1b84401ff78b2cb:384ad8403e8c01e7678a4a50ad385073:c58bfa7cdde0932d951cc27922a27c19$
 --
 -- local sheetInfo = require("mysheet")
 -- local myImageSheet = graphics.newImageSheet( "mysheet.png", sheetInfo:getSheet() )
@@ -16,8 +16,20 @@ SheetInfo.sheet =
     
         {
             -- 0
-            x=386,
-            y=2,
+            x=250,
+            y=70,
+            width=74,
+            height=56,
+
+            sourceX = 55,
+            sourceY = 18,
+            sourceWidth = 130,
+            sourceHeight = 74
+        },
+        {
+            -- 1
+            x=558,
+            y=64,
             width=64,
             height=50,
 
@@ -27,9 +39,21 @@ SheetInfo.sheet =
             sourceHeight = 74
         },
         {
-            -- 1
-            x=250,
-            y=2,
+            -- 2
+            x=326,
+            y=70,
+            width=74,
+            height=56,
+
+            sourceX = 0,
+            sourceY = 18,
+            sourceWidth = 130,
+            sourceHeight = 74
+        },
+        {
+            -- 3
+            x=490,
+            y=64,
             width=66,
             height=60,
 
@@ -39,8 +63,20 @@ SheetInfo.sheet =
             sourceHeight = 74
         },
         {
-            -- 2
-            x=2,
+            -- 4
+            x=352,
+            y=2,
+            width=100,
+            height=66,
+
+            sourceX = 26,
+            sourceY = 5,
+            sourceWidth = 130,
+            sourceHeight = 74
+        },
+        {
+            -- 5
+            x=126,
             y=2,
             width=122,
             height=74,
@@ -51,9 +87,21 @@ SheetInfo.sheet =
             sourceHeight = 74
         },
         {
-            -- 3
-            x=452,
-            y=2,
+            -- 6
+            x=402,
+            y=70,
+            width=86,
+            height=54,
+
+            sourceX = 36,
+            sourceY = 9,
+            sourceWidth = 130,
+            sourceHeight = 74
+        },
+        {
+            -- 7
+            x=50,
+            y=78,
             width=46,
             height=42,
 
@@ -63,9 +111,21 @@ SheetInfo.sheet =
             sourceHeight = 74
         },
         {
-            -- 4
+            -- 8
+            x=610,
+            y=2,
+            width=14,
+            height=40,
+
+            sourceX = 108,
+            sourceY = 20,
+            sourceWidth = 130,
+            sourceHeight = 74
+        },
+        {
+            -- 9
             x=2,
-            y=78,
+            y=122,
             width=1,
             height=1,
 
@@ -74,10 +134,22 @@ SheetInfo.sheet =
             sourceWidth = 130,
             sourceHeight = 74
         },
+                {
+            -- 10
+            x=98,
+            y=78,
+            width=14,
+            height=40,
+
+            sourceX = 8,
+            sourceY = 20,
+            sourceWidth = 130,
+            sourceHeight = 74
+        },
         {
-            -- 5
-            x=452,
-            y=46,
+            -- 11
+            x=2,
+            y=78,
             width=46,
             height=42,
 
@@ -87,8 +159,20 @@ SheetInfo.sheet =
             sourceHeight = 74
         },
         {
-            -- 6
-            x=126,
+            -- 12
+            x=454,
+            y=2,
+            width=86,
+            height=54,
+
+            sourceX = 7,
+            sourceY = 9,
+            sourceWidth = 130,
+            sourceHeight = 74
+        },
+        {
+            -- 13
+            x=2,
             y=2,
             width=122,
             height=74,
@@ -99,8 +183,20 @@ SheetInfo.sheet =
             sourceHeight = 74
         },
         {
-            -- 7
-            x=318,
+            -- 14
+            x=250,
+            y=2,
+            width=100,
+            height=66,
+
+            sourceX = 3,
+            sourceY = 5,
+            sourceWidth = 130,
+            sourceHeight = 74
+        },
+        {
+            -- 15
+            x=542,
             y=2,
             width=66,
             height=60,
@@ -110,10 +206,11 @@ SheetInfo.sheet =
             sourceWidth = 130,
             sourceHeight = 74
         },
+
     },
     
-    sheetContentWidth = 500,
-    sheetContentHeight = 90
+    sheetContentWidth = 627,
+    sheetContentHeight = 128
 }
 
 SheetInfo.frameIndex =
@@ -121,12 +218,20 @@ SheetInfo.frameIndex =
 
     ["0"] = 1,
     ["1"] = 2,
-    ["2"] = 3,
-    ["3"] = 4,
-    ["4"] = 5,
-    ["5"] = 6,
-    ["6"] = 7,
-    ["7"] = 8,
+    ["10"] = 3,
+    ["11"] = 4,
+    ["12"] = 5,
+    ["13"] = 6,
+    ["14"] = 7,
+    ["15"] = 8,
+    ["2"] = 9,
+    ["3"] = 10,
+    ["4"] = 11,
+    ["5"] = 12,
+    ["6"] = 13,
+    ["7"] = 14,
+    ["8"] = 15,
+    ["9"] = 16,
 }
 
 function SheetInfo:getSheet()

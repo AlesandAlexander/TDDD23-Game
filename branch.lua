@@ -31,7 +31,7 @@ function enemy.new(position)    -- constructor
         { 
             name = "turn",  --name of animation sequence
             start = 1,  --starting frame index
-            count = 8,  --total number of frames to animate consecutively before stopping or looping
+            count = 16,  --total number of frames to animate consecutively before stopping or looping
             time = 1000,  --optional, in milliseconds; if not supplied, the sprite is frame-based
             loopCount = 2,  --optional. 0 (default) repeats forever; a positive integer specifies the number of loops
             loopDirection = "forward"  --optional, either "forward" (default) or "bounce" which will play forward then backwards through the sequence of frames
@@ -44,18 +44,18 @@ function enemy.new(position)    -- constructor
 
     function animation:rotateRight()
         local function right()
-            animation:setPosition((animation.position + 1) % 8)        
+            animation:setPosition((animation.position + 1) % 16)        
         end
         right()
-        timer.performWithDelay( 120, right)
+        timer.performWithDelay( rotateTime/3, right, 3)
     end
 
     function animation:rotateLeft()
         local function left()
-            animation:setPosition((animation.position - 1) % 8)
+            animation:setPosition((animation.position - 1) % 16)
         end
         left()
-        timer.performWithDelay( 120, left)
+        timer.performWithDelay( rotateTime/3, left, 3)
     end
 
     function animation:setPosition(pos)
@@ -63,32 +63,30 @@ function enemy.new(position)    -- constructor
             animation.position = pos
             animation:setFrame( pos+1 )
 
-            ------Positions------
-            ----------4----------
-            ------3-------5------
-            --2---------------6--
-            ------1-------7------
-            ----------0----------
 
-            -- if pos == 0 or pos == 1 or pos == 7 then
-            --     animation.x = _W/2
-            -- elseif pos <= 4 then
-            --     animation.x = _W/2 - 110
-            -- elseif pos > 4 then
-            --     animation.x = _W/2 + 110
-            -- end
+            ------Positions--------
+            ----------9------------
+            --------8---10---------
+            ------7-------11-------
+            ----6-----------12-----
+            --5---------------13---
+            ----4-----------14-----
+            ------3-------15-------
+            --------2---0----------
+            ----------1------------
 
-            if pos == 0 then
+
+            if pos <= 2 then
                 animation.x = _W/2
-            elseif pos <= 4 then
-                animation.x = _W/2 - 110
-            elseif pos > 4 then
-                animation.x = _W/2 + 110
+            elseif pos <= 9 then
+                animation.x = _W/2 - 116
+            elseif pos > 9 then
+                animation.x = _W/2 + 116
             end
         end
     end
 
-    animation:setPosition(position*2)
+    animation:setPosition(position*4+1)
 
     return animation
 
