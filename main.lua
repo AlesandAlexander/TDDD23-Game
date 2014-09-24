@@ -4,7 +4,7 @@ storyboard.purgeOnSceneChange = true
 _W = display.contentWidth
 _H = display.contentHeight
 
-rotateTime = 250
+rotateTime = 200
 
 --
 locked = false

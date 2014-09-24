@@ -1,5 +1,6 @@
 local enemy = {}
 local sheetInfo = require("branchSheet")
+local numberOfFrames = 16
 --local enemy = {}
 --local enemy_mt = { __index = enemy }    -- metatable
  
@@ -31,7 +32,7 @@ function enemy.new(position)    -- constructor
         { 
             name = "turn",  --name of animation sequence
             start = 1,  --starting frame index
-            count = 16,  --total number of frames to animate consecutively before stopping or looping
+            count = numberOfFrames,  --total number of frames to animate consecutively before stopping or looping
             time = 1000,  --optional, in milliseconds; if not supplied, the sprite is frame-based
             loopCount = 2,  --optional. 0 (default) repeats forever; a positive integer specifies the number of loops
             loopDirection = "forward"  --optional, either "forward" (default) or "bounce" which will play forward then backwards through the sequence of frames
@@ -44,18 +45,18 @@ function enemy.new(position)    -- constructor
 
     function animation:rotateRight()
         local function right()
-            animation:setPosition((animation.position + 1) % 16)        
+            animation:setPosition((animation.position + 1) % numberOfFrames)        
         end
         right()
-        timer.performWithDelay( rotateTime/3, right, 3)
+        timer.performWithDelay( rotateTime/((numberOfFrames/4)-1), right, (numberOfFrames/4)-1)
     end
 
     function animation:rotateLeft()
         local function left()
-            animation:setPosition((animation.position - 1) % 16)
+            animation:setPosition((animation.position - 1) % numberOfFrames)
         end
         left()
-        timer.performWithDelay( rotateTime/3, left, 3)
+        timer.performWithDelay( rotateTime/((numberOfFrames/4)-1), left, (numberOfFrames/4)-1)
     end
 
     function animation:setPosition(pos)
