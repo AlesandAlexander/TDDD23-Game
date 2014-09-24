@@ -1,15 +1,14 @@
 local storyboard = require( "storyboard" )
 scene = storyboard.newScene()
-
-display.setStatusBar( display.HiddenStatusBar )
-    
-_Group = display.newGroup()
-_Items = {}
 physics = require("physics")
---physics.setDrawMode( "hybrid" )
-physics.start()
+local Tree = require("tree")
+local Player = require("player")
+local Background = require("background")
+local tree
+local background
+local unlockTimer
 
-physics.setGravity( 0, 0 )
+--physics.setDrawMode( "hybrid" )
 
 ----------------------------------------------------------------------------------
 -- 
@@ -38,22 +37,37 @@ function scene:createScene( event )
     --      Example use-case: Restore 'group' from previously saved state.
 
     -----------------------------------------------------------------------------
+    --local background = require("background")
+
+    --
+    local locked = false
+
+    -- 0 = none, 1 = left, 2 = right
+    local nextAction = 0
+
+
     local runRight
     local runLeft
-    local background = require("background")
+    background = Background:new()
     group:insert(background)
-    local tree = require("tree")
+    tree = Tree:new()
     group:insert(tree)
     local despawner = display.newRect( _W/2, _H+200, _W, 100 )
-    local left = display.newRect( _W/4, _H/2, _W/2, _H )
-    local right = display.newRect( _W-_W/4, _H/2, _W/2, _H )
-    right.alpha = 0.01
-    left.alpha = 0.01
+    local leftButton = display.newRect( _W/4, _H/2, _W/2, _H )
+    local rightButton = display.newRect( _W-_W/4, _H/2, _W/2, _H )
+    group:insert(rightButton)
+    group:insert(leftButton)
+    leftButton.alpha = 0.01
+    rightButton.alpha = 0.01
 
-    local player = require("player")
+    local player = Player:new()
     group:insert(player)
 
+    physics.start()
+    physics.setGravity( 0, 0 )
+
     local endGame
+
 
     local function unLock()
         if nextAction == 1 then
@@ -92,14 +106,14 @@ function scene:createScene( event )
         tree:rotateRight()
         background:rotateRight()
         playerRotateRight()
-        timer.performWithDelay( rotateTime+50, unLock )
+        unlockTimer = timer.performWithDelay( rotateTime+50, unLock )
     end
 
     function runLeft()
         tree:rotateLeft()
         background:rotateLeft()
         playerRotateLeft()
-        timer.performWithDelay( rotateTime+50, unLock )
+        unlockTimer = timer.performWithDelay( rotateTime+50, unLock )
     end
 
     local function onDespawnerCollision(self, event)
@@ -117,8 +131,8 @@ function scene:createScene( event )
     end
 
 
-    right:addEventListener( "touch", rightClick )
-    left:addEventListener( "touch", leftClick )
+    rightButton:addEventListener( "touch", rightClick )
+    leftButton:addEventListener( "touch", leftClick )
 
     physics.addBody( player, "dynamic", {isSensor=true, box={halfWidth=10, halfHeight=10}})
     physics.addBody( despawner, "dynamic", {isSensor=true})
@@ -131,14 +145,7 @@ function scene:createScene( event )
 
     tree:start(10, 20)
 
-    local function dispose()
-        Runtime:removeEventListener( "enterFrame", gameLoop )
-    end
-
     function endGame()
-        background:dispose()
-        tree:dispose()
-        dispose()
         storyboard.gotoScene( "menu")
     end
 
@@ -168,6 +175,7 @@ function scene:enterScene( event )
 
     -----------------------------------------------------------------------------
 
+
 end
 
 
@@ -180,6 +188,7 @@ function scene:exitScene( event )
     --      INSERT code here (e.g. stop timers, remove listeners, unload sounds, etc.)
 
     -----------------------------------------------------------------------------
+
 
 end
 
@@ -207,36 +216,15 @@ function scene:destroyScene( event )
 
     -----------------------------------------------------------------------------
 
-end
+    if unlockTimer ~= nil then
+        timer.cancel( unlockTimer )
+    end
+    tree:dispose()
+    background:dispose()
+    Runtime:removeEventListener( "enterFrame", gameLoop )
 
-
--- Called if/when overlay scene is displayed via storyboard.showOverlay()
-function scene:overlayBegan( event )
-    local group = self.view
-    local overlay_name = event.sceneName  -- name of the overlay scene
-
-    -----------------------------------------------------------------------------
-
-    --      This event requires build 2012.797 or later.
-
-    -----------------------------------------------------------------------------
 
 end
-
-
--- Called if/when overlay scene is hidden/removed via storyboard.hideOverlay()
-function scene:overlayEnded( event )
-    local group = self.view
-    local overlay_name = event.sceneName  -- name of the overlay scene
-
-    -----------------------------------------------------------------------------
-
-    --      This event requires build 2012.797 or later.
-
-    -----------------------------------------------------------------------------
-
-end
-
 
 
 ---------------------------------------------------------------------------------
@@ -263,11 +251,6 @@ scene:addEventListener( "didExitScene", scene )
 -- storyboard.purgeScene() or storyboard.removeScene().
 scene:addEventListener( "destroyScene", scene )
 
--- "overlayBegan" event is dispatched when an overlay scene is shown
-scene:addEventListener( "overlayBegan", scene )
-
--- "overlayEnded" event is dispatched when an overlay scene is hidden/removed
-scene:addEventListener( "overlayEnded", scene )
 
 ---------------------------------------------------------------------------------
 

@@ -84,6 +84,8 @@ end
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene( event )
     local group = self.view
+    storyboard.removeScene("game")
+    print("Game removed")
 
     -----------------------------------------------------------------------------
 

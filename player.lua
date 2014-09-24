@@ -1,32 +1,37 @@
-local sheetData = { width=43, height=64, numFrames=9, sheetContentWidth=129, sheetContentHeight=192 }
-local sheet = graphics.newImageSheet( "ferret.png", sheetData )
-local sequenceData = {name="normal", frames={7,8,9}, time=800}
+local pack = {}
 
-local Player = display.newSprite( sheet, sequenceData )
+function pack:new()
+	local sheetData = { width=43, height=64, numFrames=9, sheetContentWidth=129, sheetContentHeight=192 }
+	local sheet = graphics.newImageSheet( "ferret.png", sheetData )
+	local sequenceData = {name="normal", frames={7,8,9}, time=800}
 
-Player:scale( 2, 2 )
+	local Player = display.newSprite( sheet, sequenceData )
 
-Player.x = _W/2
-Player.y = _H*0.75
+	Player:scale( 2, 2 )
 
-Player:play( )
+	Player.x = _W/2
+	Player.y = _H*0.75
 
-function playerRotateLeft()
-	Player.rotation = -20
-	local function stopRotation()
+	Player:play( )
+
+	function playerRotateLeft()
+		Player.rotation = -20
+		local function stopRotation()
+			Player.rotation = 0
+		end
+		timer.performWithDelay( rotateTime, stopRotation)
+	end
+
+	function playerRotateRight()
+		Player.rotation = 20
+		local function stopRotation()
 		Player.rotation = 0
+		end
+		timer.performWithDelay( rotateTime, stopRotation)
 	end
-	timer.performWithDelay( rotateTime, stopRotation)
-end
 
-function playerRotateRight()
-	Player.rotation = 20
-	local function stopRotation()
-	Player.rotation = 0
-	end
-	timer.performWithDelay( rotateTime, stopRotation)
+	return Player
 end
 
 
-
-return Player
+return pack
