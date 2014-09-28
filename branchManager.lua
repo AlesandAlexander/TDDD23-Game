@@ -14,8 +14,11 @@ function pack:new()
 
 	local function spawnBranch()
 	    local numberToSpawn = math.random(0,3)
+	    local positions = {0,1,2,3}
 	    for i=1,numberToSpawn do
-	        local branch = enemy.new(math.random(0,3))
+	    	local position = math.random(1,#positions)
+	        local branch = enemy.new(positions[position])
+	    	table.remove( positions, position )
 	        branch.y = -100
 	        physics.addBody( branch, "dynamic", {isSensor=true, box={halfWidth=80, halfHeight=30}})
 	        branchGroup:insert(branch)

@@ -143,6 +143,7 @@ function scene:createScene( event )
     end
 
     local function updateTime()
+        print( "updateTime" )
         timeGraphic.text = "Time: " .. time
         if (time <= 0) then
             scoreManager:saveScore(player.score)
@@ -344,6 +345,7 @@ function scene:destroyScene( event )
 end
 
 function scene:overlayBegan( event )
+    print("OVerlay began")
     local group = self.view
     if unlockTimer ~= nil then
         timer.cancel( unlockTimer )

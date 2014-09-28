@@ -4,6 +4,7 @@ local storyboard = require "storyboard"
 local scene = storyboard.newScene()
 
 function scene:createScene( event )
+    print("game over create")
     group = self.view
     local group = group
     local popup = display.newRoundedRect( group, _W/2, _H/2, _W-100, _H-200, 5 )
@@ -20,15 +21,15 @@ function scene:createScene( event )
     restartButton.strokeWidth = 3
     restartButton:setFillColor(255,255,0)
     restartButton:setStrokeColor()
-    local restartButton = display.newText( group, "Retry", _W/2, _H*0.6, native.systemFontBold, 35 )
-    restartButton:setFillColor()
+    local restartButtonText = display.newText( group, "Retry", _W/2, _H*0.6, native.systemFontBold, 35 )
+    restartButtonText:setFillColor()
 
     local menuButton = display.newRoundedRect( group, _W/2, _H*0.7, _W*0.6, _H/12, 5 )
     menuButton.strokeWidth = 3
     menuButton:setFillColor(255,255,0)
     menuButton:setStrokeColor()
-    local menuButton = display.newText( group, "Menu", _W/2, _H*0.7, native.systemFontBold, 35 )
-    menuButton:setFillColor()
+    local menuButtonText = display.newText( group, "Menu", _W/2, _H*0.7, native.systemFontBold, 35 )
+    menuButtonText:setFillColor()
 
 
     local function restartGame()
