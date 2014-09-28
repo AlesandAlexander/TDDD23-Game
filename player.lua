@@ -8,13 +8,14 @@ function pack:new()
 	local Player = display.newSprite( sheet, sequenceData )
 
 	Player:scale( 2, 2 )
+	Player.score = 0
 
 	Player.x = _W/2
 	Player.y = _H*0.75
 
 	Player:play( )
 
-	function playerRotateLeft()
+	function Player:rotateLeft()
 		Player.rotation = -20
 		local function stopRotation()
 			Player.rotation = 0
@@ -22,7 +23,7 @@ function pack:new()
 		timer.performWithDelay( rotateTime, stopRotation)
 	end
 
-	function playerRotateRight()
+	function Player:rotateRight()
 		Player.rotation = 20
 		local function stopRotation()
 		Player.rotation = 0

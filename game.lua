@@ -105,14 +105,14 @@ function scene:createScene( event )
     function runRight()
         tree:rotateRight()
         background:rotateRight()
-        playerRotateRight()
+        player:rotateRight()
         unlockTimer = timer.performWithDelay( rotateTime+50, unLock )
     end
 
     function runLeft()
         tree:rotateLeft()
         background:rotateLeft()
-        playerRotateLeft()
+        player:rotateLeft()
         unlockTimer = timer.performWithDelay( rotateTime+50, unLock )
     end
 
