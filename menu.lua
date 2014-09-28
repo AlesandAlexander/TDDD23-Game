@@ -45,12 +45,12 @@ function scene:createScene( event )
 
     local function startGame()
         display.remove( group )
-        storyboard.gotoScene( "game")
+        storyboard.gotoScene( "game", {effect="crossFade", time=1000})
     end
 
     local function showHighscore()
         display.remove( group )
-        storyboard.gotoScene( "highscoreScreen")
+        storyboard.gotoScene( "highscoreScreen", {effect="slideLeft", time=500})
     end
 
     playButton:addEventListener( "tap", startGame )
@@ -75,7 +75,6 @@ end
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene( event )
     local group = self.view
-    storyboard.removeScene("game")
     print("Game removed")
 
     -----------------------------------------------------------------------------

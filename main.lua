@@ -8,4 +8,4 @@ _H = display.contentHeight
 
 rotateTime = 200
 
-storyboard.gotoScene( "menu" )
+storyboard.gotoScene( "menu", {effect="fade", time=400} )

@@ -31,6 +31,10 @@ function pack:new()
 		timer.performWithDelay( rotateTime, stopRotation)
 	end
 
+	function Player:stopSprite()
+		Player:pause( )
+	end
+
 	return Player
 end
 

@@ -10,6 +10,8 @@ local background
 local unlockTimer
 local countDownTimer
 local scoreTimer
+local player
+local group
 
 --physics.setDrawMode( "hybrid" )
 
@@ -33,7 +35,6 @@ local scoreTimer
 -- Called when the scene's view does not exist:
 function scene:createScene( event )
     group = self.view
-    local group = group
     -----------------------------------------------------------------------------
 
     --      CREATE display objects and add them to 'group' here.
@@ -70,7 +71,7 @@ function scene:createScene( event )
 
     local scoreManager = ScoreManager:new()
 
-    local player = Player:new()
+    player = Player:new()
     group:insert(player)
 
     local scoreCounter = display.newEmbossedText( { text=player.score, fontSize=30, align="center", x=_W/2, y=20 } )
@@ -125,7 +126,9 @@ function scene:createScene( event )
     local function updateTime()
         timeGraphic.text = "Time: " .. time
         if (time <= 0) then
-            endGame()
+            scoreManager:saveScore(player.score)
+            storyboard.showOverlay( "gameOver" ,{effect = "fade",time = 400, isModal = true,params ={score = player.score}} )
+            --endGame()
         end
     end
 
@@ -214,7 +217,6 @@ function scene:createScene( event )
     tree:start(10, 20)
 
     function endGame()
-        scoreManager:saveScore(player.score)
         storyboard.gotoScene( "menu")
     end
 
@@ -250,7 +252,9 @@ end
 
 -- Called when scene is about to move offscreen:
 function scene:exitScene( event )
-    local group = self.view
+    background:dispose()
+    display.remove(self.view)
+    self.view = nil
 
     -----------------------------------------------------------------------------
 
@@ -284,16 +288,38 @@ function scene:destroyScene( event )
     --      INSERT code here (e.g. remove listeners, widgets, save state, etc.)
 
     -----------------------------------------------------------------------------
+    
+end
 
+function scene:overlayBegan( event )
+    local group = self.view
     if unlockTimer ~= nil then
         timer.cancel( unlockTimer )
     end
+    tree:dispose()
+    player:stopSprite()    
     timer.cancel( countDownTimer )
     timer.cancel( scoreTimer )
-    tree:dispose()
-    background:dispose()
     Runtime:removeEventListener( "enterFrame", gameLoop )
+    -----------------------------------------------------------------------------
 
+    --      This event requires build 2012.797 or later.
+
+    -----------------------------------------------------------------------------
+
+end
+
+
+-- Called if/when overlay scene is hidden/removed via storyboard.hideOverlay()
+function scene:overlayEnded( event )
+    local group = self.view
+    local overlay_name = event.sceneName  -- name of the overlay scene
+
+    -----------------------------------------------------------------------------
+
+    --      This event requires build 2012.797 or later.
+
+    -----------------------------------------------------------------------------
 
 end
 
@@ -321,6 +347,11 @@ scene:addEventListener( "didExitScene", scene )
 -- automatically unloaded in low memory situations, or explicitly via a call to
 -- storyboard.purgeScene() or storyboard.removeScene().
 scene:addEventListener( "destroyScene", scene )
+-- "overlayBegan" event is dispatched when an overlay scene is shown
+scene:addEventListener( "overlayBegan", scene )
+
+-- "overlayEnded" event is dispatched when an overlay scene is hidden/removed
+scene:addEventListener( "overlayEnded", scene )
 
 
 ---------------------------------------------------------------------------------
