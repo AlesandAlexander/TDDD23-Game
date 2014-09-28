@@ -150,6 +150,24 @@ function scene:createScene( event )
         end
     end
 
+    local function notifyHit()
+        local counter = 10
+        local time = 10
+        local rep = 5
+        local amount = 10
+        local rot = 2
+        local function shake()
+            counter = counter - 1
+            print (counter)
+            if counter >= 0 then
+                transition.to( group, {x=math.random(-amount, amount), y=math.random(-amount, amount), rotation = math.random(-rot, rot), time=time, onComplete=shake} )
+            else
+                transition.to( group, {x=0, y=0, time=time, rotation=0} )
+            end
+        end
+        shake()
+    end
+
 
     local function onPlayerCollision(self, event)
         if (event.phase == "began") then
@@ -159,6 +177,7 @@ function scene:createScene( event )
                 time = time + 10
                 tree:setSpeed(tree:getSpeed() + 1)
             else
+                notifyHit()
                 time = time - 5
                 updateTime()
             end
