@@ -1,7 +1,7 @@
 local storyboard = require( "storyboard" )
 scene = storyboard.newScene()
+local ScoreManager = require("scoreManager")
 
-display.setStatusBar( display.HiddenStatusBar )
 
 ----------------------------------------------------------------------------------
 -- 
@@ -29,32 +29,27 @@ function scene:createScene( event )
     background.x = _W/2
     background.y = _H/2
 
-    local playButton = display.newRoundedRect( group, _W/2, _H*0.65, _W*0.8, _H/12, 5 )
-    playButton.strokeWidth = 3
-    playButton:setFillColor(255,255,0)
-    playButton:setStrokeColor()
-    local playButtonText = display.newText( group, "Play", _W/2, _H*0.65, native.systemFontBold, 35 )
-    playButtonText:setFillColor()
+	local backButton = display.newRoundedRect( group, _W/2, _H*0.8, _W*0.8, _H/12, 5 )
+    backButton.strokeWidth = 3
+    backButton:setFillColor(255,255,0)
+    backButton:setStrokeColor()
+    local backButtonText = display.newText( group, "Back", _W/2, _H*0.8, native.systemFontBold, 35 )
+    backButtonText:setFillColor()
 
-    local highscoreButton = display.newRoundedRect( group, _W/2, _H*0.8, _W*0.8, _H/12, 5 )
-    highscoreButton.strokeWidth = 3
-    highscoreButton:setFillColor(255,255,0)
-    highscoreButton:setStrokeColor()
-    local highscoreButtonText = display.newText( group, "Highscore", _W/2, _H*0.8, native.systemFontBold, 35 )
-    highscoreButtonText:setFillColor()
+    scoreManager = ScoreManager:new()
+	local highscoreList = scoreManager:loadScore()
 
-    local function startGame()
+	for i=1,#highscoreList do
+		local score = display.newText( group, highscoreList[i], _W/2, _H*0.1+i*20, native.systemFontBold, 20 )
+		score:setFillColor( gray )
+	end
+
+    local function showMenu()
         display.remove( group )
-        storyboard.gotoScene( "game")
+        storyboard.gotoScene( "menu")
     end
 
-    local function showHighscore()
-        display.remove( group )
-        storyboard.gotoScene( "highscoreScreen")
-    end
-
-    playButton:addEventListener( "tap", startGame )
-    highscoreButton:addEventListener( "tap", showHighscore )
+    backButton:addEventListener( "tap", showMenu )
 
 end
 
@@ -75,9 +70,6 @@ end
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene( event )
     local group = self.view
-    storyboard.removeScene("game")
-    print("Game removed")
-
     -----------------------------------------------------------------------------
 
     --      INSERT code here (e.g. start timers, load audio, start listeners, etc.)
