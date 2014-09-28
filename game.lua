@@ -4,9 +4,11 @@ physics = require("physics")
 local Tree = require("tree")
 local Player = require("player")
 local Background = require("background")
+local ScoreManager = require("scoreManager")
 local tree
 local background
 local unlockTimer
+local scoreTimer
 
 --physics.setDrawMode( "hybrid" )
 
@@ -55,16 +57,30 @@ function scene:createScene( event )
     local despawner = display.newRect( _W/2, _H+200, _W, 100 )
     local leftButton = display.newRect( _W/4, _H/2, _W/2, _H )
     local rightButton = display.newRect( _W-_W/4, _H/2, _W/2, _H )
-    local timeGraphic = display.newText( "Time: 20", _W-50, 20, native.systemFontBold, 25)
-    timeGraphic:setFillColor()
     group:insert(rightButton)
     group:insert(leftButton)
     leftButton.alpha = 0.01
     rightButton.alpha = 0.01
     local time = 30
+    local timeGraphic = display.newText( "Time: " .. time, _W-50, 20, native.systemFontBold, 25)
+    timeGraphic:setFillColor()
+    group:insert(timeGraphic)
+
+
+    local scoreManager = ScoreManager:new()
 
     local player = Player:new()
     group:insert(player)
+
+    local scoreCounter = display.newEmbossedText( { text=player.score, fontSize=30, align="center", x=_W/2, y=20 } )
+    local color = 
+    {
+        highlight = { r=1, g=1, b=1 },
+        shadow = { r=0, g=0, b=0 }
+    }
+    scoreCounter:setEmbossColor( color )
+    group:insert(scoreCounter)
+
 
     physics.start()
     physics.setGravity( 0, 0 )
@@ -105,6 +121,13 @@ function scene:createScene( event )
         end
     end
 
+    local function updateTime()
+        timeGraphic.text = "Time: " .. time
+        if (time <= 0) then
+            endGame()
+        end
+    end
+
     function runRight()
         tree:rotateRight()
         background:rotateRight()
@@ -136,8 +159,14 @@ function scene:createScene( event )
                 tree:setSpeed(tree:getSpeed() + 1)
             else
                 time = time - 5
+                updateTime()
             end
         end
+    end
+
+    local function increaseScore()
+        player.score = player.score + 1
+        scoreCounter.text = player.score
     end
 
 
@@ -153,19 +182,20 @@ function scene:createScene( event )
     despawner.collision = onDespawnerCollision
     despawner:addEventListener( "collision", despawner )
 
+
     local function changeTime()
         time = time - 1
-        display.remove(timeGraphic)
-        timeGraphic = display.newText( ("Time: " .. time), _W-50, 20, native.systemFontBold, 25)
-        timeGraphic:setFillColor(  )
+        updateTime()
         timer.performWithDelay( 1000, changeTime )
     end
 
     timer.performWithDelay( 1000, changeTime )
+    scoreTimer = timer.performWithDelay( 1000, increaseScore, 0)
 
     tree:start(10, 20)
 
     function endGame()
+        scoreManager:saveScore(player.score)
         storyboard.gotoScene( "menu")
     end
 
@@ -239,6 +269,7 @@ function scene:destroyScene( event )
     if unlockTimer ~= nil then
         timer.cancel( unlockTimer )
     end
+    timer.cancel( scoreTimer )
     tree:dispose()
     background:dispose()
     Runtime:removeEventListener( "enterFrame", gameLoop )
