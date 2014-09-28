@@ -13,8 +13,6 @@ function pack:new()
 	Player.x = _W/2
 	Player.y = _H*0.75
 
-	Player:play( )
-
 	function Player:rotateLeft()
 		Player.rotation = -20
 		local function stopRotation()
@@ -34,6 +32,12 @@ function pack:new()
 	function Player:stopSprite()
 		Player:pause( )
 	end
+
+	function Player:start()
+		Player:play()
+	end
+
+
 
 	return Player
 end
