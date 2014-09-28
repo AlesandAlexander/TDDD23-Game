@@ -5,13 +5,6 @@ local Tree = require("tree")
 local Player = require("player")
 local Background = require("background")
 local ScoreManager = require("scoreManager")
-local tree
-local background
-local unlockTimer
-local countDownTimer
-local scoreTimer
-local player
-local group
 
 --physics.setDrawMode( "hybrid" )
 
@@ -26,6 +19,17 @@ local group
 
 
 -- local forward references should go here --
+local tree
+local background
+local unlockTimer
+local countDownTimer
+local scoreTimer
+local player
+local group
+local moveRightHand
+local moveLeftHand
+local runRight
+local runLeft
 
 
 ---------------------------------------------------------------------------------
@@ -49,7 +53,6 @@ function scene:createScene( event )
     -- 0 = none, 1 = left, 2 = right
     local nextAction = 0
 
-
     local runRight
     local runLeft
     background = Background:new()
@@ -59,15 +62,27 @@ function scene:createScene( event )
     local despawner = display.newRect( _W/2, _H+200, _W, 100 )
     local leftButton = display.newRect( _W/4, _H/2, _W/2, _H )
     local rightButton = display.newRect( _W-_W/4, _H/2, _W/2, _H )
-    group:insert(rightButton)
-    group:insert(leftButton)
+    local gameStarter = display.newRect( _W/2, _H/2, _W, _H )
     leftButton.alpha = 0.01
     rightButton.alpha = 0.01
+    gameStarter.alpha = 0.01
     local time = 30
     local timeGraphic = display.newText( "Time: " .. time, _W-50, 20, native.systemFontBold, 25)
     timeGraphic:setFillColor()
     group:insert(timeGraphic)
 
+    local leftHand = display.newImageRect( group, "hand.png", 120, 120 )
+    leftHand.x = 30
+    leftHand.y = _H-80
+    leftHand.xScale = -1.07
+    leftHand.yScale = 1.07
+    leftHand.rotation = 30
+    local rightHand = display.newImageRect( group, "hand.png", 120, 120 )
+    rightHand.x = _W-30
+    rightHand.y = _H-80
+    rightHand.xScale = 1.07
+    rightHand.yScale = 1.07
+    rightHand.rotation = -30
 
     local scoreManager = ScoreManager:new()
 
@@ -83,11 +98,15 @@ function scene:createScene( event )
     scoreCounter:setEmbossColor( color )
     group:insert(scoreCounter)
 
+    group:insert(rightButton)
+    group:insert(leftButton)
+    group:insert(gameStarter)
 
     physics.start()
     physics.setGravity( 0, 0 )
 
     local endGame
+
 
 
     local function unLock()
@@ -192,8 +211,52 @@ function scene:createScene( event )
     end
 
 
+    local function changeTime()
+        time = time - 1
+        updateTime()
+        countDownTimer = timer.performWithDelay( 1000, changeTime )
+    end
+
+
+    local function moveHands()
+        if (rightHand ~= nil) then
+            moveLeftHand = transition.to( leftHand, {xScale=-1/rightHand.xScale, yScale=1/rightHand.yScale, time = 500} )
+            moveRightHand = transition.to( rightHand, {xScale=1/rightHand.xScale, yScale=1/rightHand.yScale, time = 500, onComplete=moveHands} )
+        end
+    end
+
+    local function removeHands()
+        local function deleteHands()
+            display.remove( rightHand )
+            rightHand = nil
+            display.remove( leftHand )
+            leftHand = nil
+        end
+        transition.to( rightHand, {xScale=0.01, yScale=0.01, time = 300} )
+        transition.to( leftHand, {xScale=0.01, yScale=0.01, time = 300, onComplete=deleteHands} )
+    end
+
+
+    local function startGame(event)
+        if (event.phase == "began") then 
+            tree:start(10, 20) 
+            player:start()
+            countDownTimer = timer.performWithDelay( 1000, changeTime )
+            scoreTimer = timer.performWithDelay( 1000, increaseScore, 0)
+            display.remove( gameStarter )
+            gameStarter = nil
+            transition.cancel(moveRightHand)
+            transition.cancel(moveLeftHand)
+            removeHands()
+        end
+    end
+
+    moveHands()
+
     rightButton:addEventListener( "touch", rightClick )
     leftButton:addEventListener( "touch", leftClick )
+
+    gameStarter:addEventListener( "touch", startGame )
 
     physics.addBody( player, "dynamic", {isSensor=true, box={halfWidth=10, halfHeight=10}})
     physics.addBody( despawner, "dynamic", {isSensor=true})
@@ -204,19 +267,8 @@ function scene:createScene( event )
     despawner.collision = onDespawnerCollision
     despawner:addEventListener( "collision", despawner )
 
-
-    local function changeTime()
-        time = time - 1
-        updateTime()
-        countDownTimer = timer.performWithDelay( 1000, changeTime )
-    end
-
-    countDownTimer = timer.performWithDelay( 1000, changeTime )
-    scoreTimer = timer.performWithDelay( 1000, increaseScore, 0)
-
-    tree:start(10, 20)
-
     function endGame()
+        scoreManager:saveScore(player.score)
         storyboard.gotoScene( "menu")
     end
 
