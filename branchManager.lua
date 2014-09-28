@@ -1,5 +1,6 @@
 local pack = {}
 local enemy = require("branch")
+local friend = require("powerUp")
 
 
 function pack:new()
@@ -21,11 +22,24 @@ function pack:new()
 	    end
 	end
 
+	local function spawnPowerUp()
+		local random= math.random(1,100)
+		if random > 85 then
+			local powerUp = friend.new(math.random(0,3))
+			powerUp.y = -100
+			physics.addBody( powerUp, "dynamic", {isSensor=true})
+			branchGroup:insert(powerUp)
+		end
+	end
+
 	local function gameLoop()
 		counter = counter-1
 		if counter <= 0 then
 			counter = difficulty
 			spawnBranch()
+		end
+		if counter == 10 then
+			spawnPowerUp()
 		end
 	    for i=branchGroup.numChildren, 1, -1 do
 	      local branch = branchGroup[i]

@@ -8,7 +8,7 @@ local tree
 local background
 local unlockTimer
 
-physics.setDrawMode( "hybrid" )
+--physics.setDrawMode( "hybrid" )
 
 ----------------------------------------------------------------------------------
 -- 
@@ -55,11 +55,13 @@ function scene:createScene( event )
     local despawner = display.newRect( _W/2, _H+200, _W, 100 )
     local leftButton = display.newRect( _W/4, _H/2, _W/2, _H )
     local rightButton = display.newRect( _W-_W/4, _H/2, _W/2, _H )
+    local timeGraphic = display.newText( "Time: 20", _W-50, 20, native.systemFontBold, 25)
+    timeGraphic:setFillColor()
     group:insert(rightButton)
     group:insert(leftButton)
     leftButton.alpha = 0.01
     rightButton.alpha = 0.01
-    local currentGameSpeed
+    local time = 30
 
     local player = Player:new()
     group:insert(player)
@@ -127,9 +129,14 @@ function scene:createScene( event )
 
     local function onPlayerCollision(self, event)
         if (event.phase == "began") then
-            --endGame()
-            currentGameSpeed = tree:getSpeed()
-            tree:setSpeed(tree:getSpeed()+1)
+            if event.other.type == "friend" then
+                display.remove( event.other )
+                event.other.isRemoved = true
+                time = time + 10
+                tree:setSpeed(tree:getSpeed() + 1)
+            else
+                time = time - 5
+            end
         end
     end
 
@@ -145,6 +152,16 @@ function scene:createScene( event )
 
     despawner.collision = onDespawnerCollision
     despawner:addEventListener( "collision", despawner )
+
+    local function changeTime()
+        time = time - 1
+        display.remove(timeGraphic)
+        timeGraphic = display.newText( ("Time: " .. time), _W-50, 20, native.systemFontBold, 25)
+        timeGraphic:setFillColor(  )
+        timer.performWithDelay( 1000, changeTime )
+    end
+
+    timer.performWithDelay( 1000, changeTime )
 
     tree:start(10, 20)
 
