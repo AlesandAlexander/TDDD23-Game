@@ -45,12 +45,12 @@ function pack:new()
 		treePartThree.y = treePartThree.y + speed
 		treePartFour.y = treePartFour.y + speed
 		if treePartOne.y >= 720 then
-			treePartOne.y = -_H*0.5
-			treePartThree.y = -_H*0.5
+			treePartOne.y = treePartTwo.y-_H
+			treePartThree.y = treePartTwo.y-_H
 		end
 		if treePartTwo.y >= 720 then
-			treePartTwo.y = -_H*0.5
-			treePartFour.y = -_H*0.5
+			treePartTwo.y = treePartOne.y-_H
+			treePartFour.y = treePartOne.y-_H
 		end
 
 		if rotateSpeed < 0 then

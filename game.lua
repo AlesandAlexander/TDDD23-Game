@@ -8,7 +8,7 @@ local tree
 local background
 local unlockTimer
 
---physics.setDrawMode( "hybrid" )
+physics.setDrawMode( "hybrid" )
 
 ----------------------------------------------------------------------------------
 -- 
@@ -59,6 +59,7 @@ function scene:createScene( event )
     group:insert(leftButton)
     leftButton.alpha = 0.01
     rightButton.alpha = 0.01
+    local currentGameSpeed
 
     local player = Player:new()
     group:insert(player)
@@ -126,7 +127,9 @@ function scene:createScene( event )
 
     local function onPlayerCollision(self, event)
         if (event.phase == "began") then
-            endGame()
+            --endGame()
+            currentGameSpeed = tree:getSpeed()
+            tree:setSpeed(tree:getSpeed()+1)
         end
     end
 

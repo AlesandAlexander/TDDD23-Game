@@ -29,26 +29,19 @@ function scene:createScene( event )
     background.x = _W/2
     background.y = _H/2
 
-    local playButton = display.newRoundedRect( group, _W/2, _H*0.5, _W*0.8, _H/12, 5 )
+    local playButton = display.newRoundedRect( group, _W/2, _H*0.65, _W*0.8, _H/12, 5 )
     playButton.strokeWidth = 3
     playButton:setFillColor(255,255,0)
     playButton:setStrokeColor()
-    local playButtonText = display.newText( group, "Play", _W/2, _H*0.5, native.systemFontBold, 35 )
+    local playButtonText = display.newText( group, "Play", _W/2, _H*0.65, native.systemFontBold, 35 )
     playButtonText:setFillColor()
 
-    local highscoreButton = display.newRoundedRect( group, _W/2, _H*0.65, _W*0.8, _H/12, 5 )
+    local highscoreButton = display.newRoundedRect( group, _W/2, _H*0.8, _W*0.8, _H/12, 5 )
     highscoreButton.strokeWidth = 3
     highscoreButton:setFillColor(255,255,0)
     highscoreButton:setStrokeColor()
-    local highscoreButton = display.newText( group, "Highscore", _W/2, _H*0.65, native.systemFontBold, 35 )
+    local highscoreButton = display.newText( group, "Highscore", _W/2, _H*0.8, native.systemFontBold, 35 )
     highscoreButton:setFillColor()
-
-    local exitButton = display.newRoundedRect( group, _W/2, _H*0.8, _W*0.8, _H/12, 5 )
-    exitButton.strokeWidth = 3
-    exitButton:setFillColor(255,255,0)
-    exitButton:setStrokeColor()
-    local exitButton = display.newText( group, "Exit", _W/2, _H*0.8, native.systemFontBold, 35 )
-    exitButton:setFillColor()
 
     local function startGame()
         display.remove( group )
@@ -63,7 +56,6 @@ function scene:createScene( event )
 
     playButton:addEventListener( "touch", startGame )
     highscoreButton:addEventListener( "touch", showHichscore )
-    exitButton:addEventListener( "touch", exitGame )
 
 end
 
