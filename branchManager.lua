@@ -33,7 +33,22 @@ function pack:new()
 	    end
 	end
 
+	local function setZ()
+		for i=branchGroup.numChildren, 1, -1 do
+			if (branchGroup[i].position == 5 or 
+				branchGroup[i].position == 13) then
+				branchGroup[i]:toFront()
+			end
+		end
+		for i=branchGroup.numChildren, 1, -1 do
+			if (branchGroup[i].position == 1) then
+				branchGroup[i]:toFront()
+			end
+		end
+	end
+
 	function branchGroup:rotateRight()
+		setZ()
 		for i=branchGroup.numChildren, 1, -1 do
 			if not branchGroup[i].isRemoved then
 				branchGroup[i]:rotateRight()
@@ -42,6 +57,7 @@ function pack:new()
 	end
 
 	function branchGroup:rotateLeft()
+		setZ()
 		for i=branchGroup.numChildren, 1, -1 do
 			if not branchGroup[i].isRemoved then
 				branchGroup[i]:rotateLeft()
