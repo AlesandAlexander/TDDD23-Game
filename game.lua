@@ -158,7 +158,6 @@ function scene:createScene( event )
         local rot = 2
         local function shake()
             counter = counter - 1
-            print (counter)
             if counter >= 0 then
                 transition.to( group, {x=math.random(-amount, amount), y=math.random(-amount, amount), rotation = math.random(-rot, rot), time=time, onComplete=shake} )
             else
