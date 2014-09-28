@@ -24,7 +24,7 @@ local ScoreManager = require("scoreManager")
 function scene:createScene( event )
     group = self.view
     local group = group
-
+    print("create highscore")
     local background = display.newImageRect( group, "bg.png", _W*9, _H )
     background.x = _W/2
     background.y = _H/2
@@ -45,6 +45,7 @@ function scene:createScene( event )
 	end
 
     local function showMenu()
+        print("button click")
         display.remove( group )
         storyboard.gotoScene( "menu")
     end

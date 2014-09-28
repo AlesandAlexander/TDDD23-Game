@@ -8,6 +8,7 @@ local ScoreManager = require("scoreManager")
 local tree
 local background
 local unlockTimer
+local countDownTimer
 local scoreTimer
 
 --physics.setDrawMode( "hybrid" )
@@ -186,10 +187,10 @@ function scene:createScene( event )
     local function changeTime()
         time = time - 1
         updateTime()
-        timer.performWithDelay( 1000, changeTime )
+        countDownTimer = timer.performWithDelay( 1000, changeTime )
     end
 
-    timer.performWithDelay( 1000, changeTime )
+    countDownTimer = timer.performWithDelay( 1000, changeTime )
     scoreTimer = timer.performWithDelay( 1000, increaseScore, 0)
 
     tree:start(10, 20)
@@ -269,6 +270,7 @@ function scene:destroyScene( event )
     if unlockTimer ~= nil then
         timer.cancel( unlockTimer )
     end
+    timer.cancel( countDownTimer )
     timer.cancel( scoreTimer )
     tree:dispose()
     background:dispose()
