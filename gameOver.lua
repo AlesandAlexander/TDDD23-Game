@@ -33,13 +33,13 @@ function scene:createScene( event )
 
 
     local function restartGame()
+        storyboard.hideOverlay( )
         display.remove(group)
-        storyboard.reloadScene( )
+        storyboard.reloadScene()
     end
 
     local function goToMenu()
         display.remove(group)
-        storyboard.purgeAll( )
         storyboard.gotoScene( "menu" )
     end    
 

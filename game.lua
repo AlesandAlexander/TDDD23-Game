@@ -30,6 +30,7 @@ local moveRightHand
 local moveLeftHand
 local runRight
 local runLeft
+local showGameOver
 
 
 ---------------------------------------------------------------------------------
@@ -49,6 +50,7 @@ function scene:createScene( event )
 
     --
     local locked = false
+    local gameOver = false
 
     -- 0 = none, 1 = left, 2 = right
     local nextAction = 0
@@ -66,7 +68,7 @@ function scene:createScene( event )
     leftButton.alpha = 0.01
     rightButton.alpha = 0.01
     gameStarter.alpha = 0.01
-    local time = 30
+    local time = 2
     local timeGraphic = display.newText( "Time: " .. time, _W-50, 20, native.systemFontBold, 25)
     timeGraphic:setFillColor()
     group:insert(timeGraphic)
@@ -143,11 +145,11 @@ function scene:createScene( event )
     end
 
     local function updateTime()
-        print( "updateTime" )
         timeGraphic.text = "Time: " .. time
-        if (time <= 0) then
+        if (time <= 0 and (not gameOver)) then
+            gameOver = true
             scoreManager:saveScore(player.score)
-            storyboard.showOverlay( "gameOver" ,{effect = "fade",time = 400, isModal = true,params ={score = player.score}} )
+            showGameOver()
             --endGame()
         end
     end
@@ -252,6 +254,59 @@ function scene:createScene( event )
         end
     end
 
+    local function stopTimers()
+        if unlockTimer ~= nil then
+            timer.cancel( unlockTimer )
+        end
+        locked = true
+        Runtime:removeEventListener( "touch", rightClick )
+        Runtime:removeEventListener( "touch", leftClick )
+        tree:dispose()
+        player:stopSprite()    
+        timer.cancel( countDownTimer )
+        timer.cancel( scoreTimer )
+        Runtime:removeEventListener( "enterFrame", gameLoop )
+    end
+
+    function showGameOver()
+        stopTimers()
+        local popup = display.newRoundedRect( group, _W/2, _H/2, _W-100, _H-200, 5 )
+        popup.strokeWidth = 3
+        popup:setFillColor(255,255,0)
+        popup:setStrokeColor()
+
+        local highScoreText = display.newText(group, "Your score was", _W/2, _H*0.35, native.systemFontBold, 30)
+        highScoreText:setFillColor()
+        local highScoreNumber = display.newText(group, player.score, _W/2, _H*0.42, native.systemFontBold, 30)
+        highScoreNumber:setFillColor()
+
+        local restartButton = display.newRoundedRect( group, _W/2, _H*0.6, _W*0.6, _H/12, 5 )
+        restartButton.strokeWidth = 3
+        restartButton:setFillColor(255,255,0)
+        restartButton:setStrokeColor()
+        local restartButtonText = display.newText( group, "Retry", _W/2, _H*0.6, native.systemFontBold, 35 )
+        restartButtonText:setFillColor()
+
+        local menuButton = display.newRoundedRect( group, _W/2, _H*0.7, _W*0.6, _H/12, 5 )
+        menuButton.strokeWidth = 3
+        menuButton:setFillColor(255,255,0)
+        menuButton:setStrokeColor()
+        local menuButtonText = display.newText( group, "Menu", _W/2, _H*0.7, native.systemFontBold, 35 )
+        menuButtonText:setFillColor()
+
+
+        local function restartGame()
+            storyboard.gotoScene("reloadScene")
+        end
+
+        local function goToMenu()
+            storyboard.gotoScene( "menu" )
+        end
+
+        restartButton:addEventListener( "tap", restartGame )
+        menuButton:addEventListener( "tap", goToMenu )
+    end
+
     moveHands()
 
     rightButton:addEventListener( "touch", rightClick )
@@ -270,7 +325,7 @@ function scene:createScene( event )
 
     function endGame()
         scoreManager:saveScore(player.score)
-        storyboard.gotoScene( "menu")
+        storyboard.gotoScene("menu")
     end
 
 end
@@ -305,9 +360,9 @@ end
 
 -- Called when scene is about to move offscreen:
 function scene:exitScene( event )
-    background:dispose()
-    display.remove(self.view)
-    self.view = nil
+    --background:dispose()
+    --display.remove(self.view)
+    --self.view = nil
 
     -----------------------------------------------------------------------------
 
@@ -335,6 +390,15 @@ end
 -- Called prior to the removal of scene's "view" (display group)
 function scene:destroyScene( event )
     local group = self.view
+    if unlockTimer ~= nil then
+        timer.cancel( unlockTimer )
+    end
+    background:dispose()
+    tree:dispose()
+    player:stopSprite()    
+    timer.cancel( countDownTimer )
+    timer.cancel( scoreTimer )
+    Runtime:removeEventListener( "enterFrame", gameLoop )
 
     -----------------------------------------------------------------------------
 
@@ -345,16 +409,7 @@ function scene:destroyScene( event )
 end
 
 function scene:overlayBegan( event )
-    print("OVerlay began")
     local group = self.view
-    if unlockTimer ~= nil then
-        timer.cancel( unlockTimer )
-    end
-    tree:dispose()
-    player:stopSprite()    
-    timer.cancel( countDownTimer )
-    timer.cancel( scoreTimer )
-    Runtime:removeEventListener( "enterFrame", gameLoop )
     -----------------------------------------------------------------------------
 
     --      This event requires build 2012.797 or later.
