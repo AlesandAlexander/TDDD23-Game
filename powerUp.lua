@@ -1,5 +1,4 @@
 local friend = {}
-local sheetInfo = require("branchSheet")
 local numberOfFrames = 16
 --local enemy = {}
 --local enemy_mt = { __index = enemy }    -- metatable
@@ -16,7 +15,14 @@ local numberOfFrames = 16
 function friend.new(position)    -- constructor
     --local self = display.newGroup()
 
-    local powerUp = display.newImageRect( "powerUp.png", 30, 30 )
+    local sheetInfo = require("can")
+    local myImageSheet = graphics.newImageSheet( "can.png", sheetInfo:getSheet() )
+    local powerUp = display.newSprite( myImageSheet , {frames={1,2,3}, time=700} )
+    powerUp:scale( 0.4, 0.4 )
+    powerUp:play()
+
+
+    --local powerUp = display.newImageRect( "powerUp.png", 30, 30 )
     powerUp.type = "friend"
 
 

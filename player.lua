@@ -1,13 +1,18 @@
 local pack = {}
 
 function pack:new()
-	local sheetData = { width=43, height=64, numFrames=9, sheetContentWidth=129, sheetContentHeight=192 }
-	local sheet = graphics.newImageSheet( "ferret.png", sheetData )
-	local sequenceData = {name="normal", frames={7,8,9}, time=800}
 
-	local Player = display.newSprite( sheet, sequenceData )
+	local sheetInfo = require("squirrel")
+	local myImageSheet = graphics.newImageSheet( "squirrel.png", sheetInfo:getSheet() )
 
-	Player:scale( 2, 2 )
+	--local sheetData = { width=43, height=64, numFrames=9, sheetContentWidth=129, sheetContentHeight=192 }
+	--local sheet = graphics.newImageSheet( "ferret.png", sheetData )
+	--local sequenceData = {name="normal", frames={7,8,9}, time=800}
+
+	--local Player = display.newSprite( sheet, sequenceData )
+	local Player = display.newSprite( myImageSheet , {frames={1, 2, 3}, time=270, loopDirection="bounce"} )
+
+	Player:scale( 0.6, 0.5 )
 	Player.score = 0
 
 	Player.x = _W/2
