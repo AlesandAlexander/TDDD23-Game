@@ -51,6 +51,8 @@ function scene:createScene( event )
     --
     local locked = false
     local gameOver = false
+    local speedSound = audio.loadSound( "bzzumm.mp3" )
+    local crashSound = audio.loadSound( "crash.mp3" )
 
     -- 0 = none, 1 = left, 2 = right
     local nextAction = 0
@@ -209,11 +211,13 @@ function scene:createScene( event )
     local function onPlayerCollision(self, event)
         if (event.phase == "began") then
             if event.other.type == "friend" then
+                local speedSoundChannal = audio.play( speedSound )
                 display.remove( event.other )
                 event.other.isRemoved = true
                 time = time + 10
                 tree:setSpeed(tree:getSpeed() + 1)
             elseif (event.other.isRemoved ~= true) then
+                local crashSoundChannal = audio.play( crashSound )
                 local direction = math.random(0, 1)
                 local speed = math.random(30, 40) * tree:getSpeed()
                 if (direction > 0.5) then
