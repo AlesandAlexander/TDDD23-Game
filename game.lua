@@ -61,14 +61,17 @@ function scene:createScene( event )
     group:insert(background)
     tree = Tree:new()
     group:insert(tree)
-    local despawner = display.newRect( _W/2, _H+200, _W, 100 )
+    local despawner = display.newRect(_W/2, _H+200, _W*2, 100 )
+    local despawnerRight = display.newRect( _W+200, _H/2-51+200, 100, _H )
+    local despawnerLeft = display.newRect( -200, _H/2-51+200, 100, _H )
+
     local leftButton = display.newRect( _W/4, _H/2, _W/2, _H )
     local rightButton = display.newRect( _W-_W/4, _H/2, _W/2, _H )
     local gameStarter = display.newRect( _W/2, _H/2, _W, _H )
     leftButton.alpha = 0.01
     rightButton.alpha = 0.01
     gameStarter.alpha = 0.01
-    local time = 10
+    local time = 100
     local timeGraphic = display.newText( "Time: " .. time, _W-50, 20, native.systemFontBold, 25)
     timeGraphic:setFillColor()
     group:insert(timeGraphic)
@@ -210,7 +213,16 @@ function scene:createScene( event )
                 event.other.isRemoved = true
                 time = time + 10
                 tree:setSpeed(tree:getSpeed() + 1)
-            else
+            elseif (event.other.isRemoved ~= true) then
+                local direction = math.random(0, 1)
+                local speed = math.random(30, 40) * tree:getSpeed()
+                if (direction > 0.5) then
+                    event.other:setLinearVelocity( speed, -tree:getSpeed()*20 )
+                else
+                    event.other:setLinearVelocity( -1 * speed, -tree:getSpeed()*20 )
+                end
+                event.other.angularVelocity = math.random(-1000, 1000)
+                event.other.isRemoved = true
                 notifyHit()
                 time = time - 5
                 updateTime()
@@ -317,14 +329,22 @@ function scene:createScene( event )
 
     gameStarter:addEventListener( "touch", startGame )
 
-    physics.addBody( player, "dynamic", {isSensor=true, box={halfWidth=10, halfHeight=10}})
+    physics.addBody( player, "dynamic", {isSensor=true, box={halfWidth=10, halfHeight=20, x=0, y=-600}})
     physics.addBody( despawner, "dynamic", {isSensor=true})
+    physics.addBody( despawnerRight, "dynamic", {isSensor=true})
+    physics.addBody( despawnerLeft, "dynamic", {isSensor=true})
 
     player.collision = onPlayerCollision
     player:addEventListener( "collision", player )
 
     despawner.collision = onDespawnerCollision
     despawner:addEventListener( "collision", despawner )
+    
+    despawnerRight.collision = onDespawnerCollision
+    despawnerRight:addEventListener( "collision", despawnerRight )
+
+    despawnerLeft.collision = onDespawnerCollision
+    despawnerLeft:addEventListener( "collision", despawnerLeft )
 
     function endGame()
         scoreManager:saveScore(player.score)
