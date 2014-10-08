@@ -42,6 +42,10 @@ function friend.new(position)    -- constructor
         timer.performWithDelay( rotateTime/((numberOfFrames/4)-1), left, (numberOfFrames/4)-1)
     end
 
+    function powerUp:stopSprite()
+        powerUp:pause( )
+    end
+
     function powerUp:setPosition(pos)
         if not powerUp.isRemoved then
             powerUp.position = pos

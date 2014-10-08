@@ -1,6 +1,6 @@
 local pack = {}
 local enemy = require("branch")
-local friend = require("powerUp")
+local powerUpType = require("powerUp")
 
 
 function pack:new()
@@ -28,7 +28,8 @@ function pack:new()
 	local function spawnPowerUp()
 		local random= math.random(1,100)
 		if random > 85 then
-			local powerUp = friend.new(math.random(0,3))
+			local powerUp = powerUpType.new(math.random(0,3))
+			powerUp.isSprite = true
 			powerUp.y = -100
 			physics.addBody( powerUp, "dynamic", {isSensor=true})
 			branchGroup:insert(powerUp)
@@ -97,9 +98,14 @@ function pack:new()
 	end
 
 	function branchGroup:dispose()
-		for i=branchGroup.numChildren, 1, -1 do
-	      local branch = branchGroup[i]
-	      branch.isRemoved = true
+		--for i=branchGroup.numChildren, 1, -1 do
+	    --  local branch = branchGroup[i]
+	    --  branch.isRemoved = true
+	    --end
+	    for i=branchGroup.numChildren, 1, -1 do
+	    	if branchGroup[i].isSprite == true then
+		    	branchGroup[i]:stopSprite()
+		    end
 	    end
 		Runtime:removeEventListener( "enterFrame", gameLoop )
 	end

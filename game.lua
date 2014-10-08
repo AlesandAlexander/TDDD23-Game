@@ -144,16 +144,6 @@ function scene:createScene( event )
         end
     end
 
-    local function updateTime()
-        timeGraphic.text = "Time: " .. time
-        if (time <= 0 and (not gameOver)) then
-            gameOver = true
-            scoreManager:saveScore(player.score)
-            showGameOver()
-            --endGame()
-        end
-    end
-
     function runRight()
         tree:rotateRight()
         background:rotateRight()
@@ -166,6 +156,26 @@ function scene:createScene( event )
         background:rotateLeft()
         player:rotateLeft()
         unlockTimer = timer.performWithDelay( rotateTime+50, unLock )
+    end
+
+    local function updateTime()
+        if time < 0 then
+            time = 0
+        end
+        timeGraphic.text = "Time: " .. time
+        if (time <= 0 and (not gameOver)) then
+            gameOver = true
+            scoreManager:saveScore(player.score)
+            showGameOver()
+        end
+    end
+
+    local function changeTime()
+        if not gameOver then
+            time = time - 1
+            updateTime()
+            countDownTimer = timer.performWithDelay( 1000, changeTime )
+        end
     end
 
     local function onDespawnerCollision(self, event)
@@ -211,13 +221,6 @@ function scene:createScene( event )
     local function increaseScore()
         player.score = player.score + 1
         scoreCounter.text = player.score
-    end
-
-
-    local function changeTime()
-        time = time - 1
-        updateTime()
-        countDownTimer = timer.performWithDelay( 1000, changeTime )
     end
 
 
