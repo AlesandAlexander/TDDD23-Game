@@ -34,6 +34,10 @@ function pack:new()
 		timer.performWithDelay( rotateTime, stopRotation)
 	end
 
+	local function startSound()
+		local sound = loadSound( "run.mp3" )
+	end
+
 	function Player:stopSprite()
 		Player:pause( )
 	end
