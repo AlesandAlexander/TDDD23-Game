@@ -6,6 +6,7 @@ local Player = require("player")
 local Laser = require("laser")
 local Background = require("background")
 local ScoreManager = require("scoreManager")
+local HintSquirrel = require("hintSquirrel")
 
 --physics.setDrawMode( "hybrid" )
 
@@ -74,7 +75,7 @@ function scene:createScene( event )
     leftButton.alpha = 0.01
     rightButton.alpha = 0.01
     gameStarter.alpha = 0.01
-    local time = 5
+    local time = 15
     local timeGraphic = display.newText( "Time: " .. time, _W-50, 20, native.systemFontBold, 25)
     timeGraphic:setFillColor()
     group:insert(timeGraphic)
@@ -370,13 +371,16 @@ function scene:createScene( event )
             physics.addBody( part4, "dynamic" )
             physics.addBody( part5, "dynamic" )
             physics.addBody( part6, "dynamic" )
-            for i = #crashGroup, 1, -1 do
-                local direction = math.random(0,1)
-                if (direction > 0.5) then
-                    crashGroup[i]:setLinearVelocity( math.random(10,20), math.random(10,20) )
-                else
-                    crashGroup[i]:setLinearVelocity( math.random(-10,-20), math.random(-10,-20) )
-                end
+
+            for i=1,60 do
+                local blood = display.newCircle( player.x+math.random(-50,50), player.y+math.random(-50,50), 3 )
+                blood:setFillColor( 0.8,0,0 )
+                crashGroup:insert( blood )
+                physics.addBody( blood, "dynamic" )
+            end
+
+            for i=crashGroup.numChildren, 1, -1 do
+                crashGroup[i]:setLinearVelocity( math.random(-50,50), math.random(-500, 100) )
                 crashGroup[i].angularVelocity = math.random(-500, 500)
             end
         end
@@ -385,14 +389,18 @@ function scene:createScene( event )
 
         local function menu()
             local transitionGroup = display.newGroup( )
-            local popup = display.newRoundedRect( transitionGroup, _W/2, _H/2, _W-100, _H-200, 5 )
+            transitionGroup.y = 120
+
+            local rope = display.newImageRect( transitionGroup, "rope.png", 70, 720)
+            rope:scale( 0.5, 0.5 )
+            rope.x = _W/2
+            rope.y = -100
+
+            local popup = display.newRoundedRect( transitionGroup, _W/2, _H/2, _W-80, _H-250, 5 )
             popup.strokeWidth = 3
             popup:setFillColor(255,255,0)
             popup:setStrokeColor()
 
-            local rope = display.newImageRect( transitionGroup, "rope.png", 256, 256)
-            rope.x = _W/2
-            rope.y = -30
 
             local highScoreText = display.newText(transitionGroup, "Your score was", _W/2, _H*0.35, native.systemFontBold, 30)
             highScoreText:setFillColor()
@@ -400,22 +408,26 @@ function scene:createScene( event )
             transitionGroup:insert(highScoreNumber)
             highScoreNumber:setFillColor()
 
-            local restartButton = display.newRoundedRect( transitionGroup, _W/2, _H*0.6, _W*0.6, _H/12, 5 )
+            local restartButton = display.newRoundedRect( transitionGroup, _W/2, _H*0.55, _W*0.6, _H/12, 5 )
             restartButton.strokeWidth = 3
             restartButton:setFillColor(255,255,0)
             restartButton:setStrokeColor()
-            local restartButtonText = display.newText( transitionGroup, "Retry", _W/2, _H*0.6, native.systemFontBold, 35 )
+            local restartButtonText = display.newText( transitionGroup, "Retry", _W/2, _H*0.55, native.systemFontBold, 35 )
             transitionGroup:insert(restartButtonText)
             restartButtonText:setFillColor()
 
-            local menuButton = display.newRoundedRect( transitionGroup, _W/2, _H*0.7, _W*0.6, _H/12, 5 )
+            local menuButton = display.newRoundedRect( transitionGroup, _W/2, _H*0.65, _W*0.6, _H/12, 5 )
             transitionGroup:insert(menuButton)
             menuButton.strokeWidth = 3
             menuButton:setFillColor(255,255,0)
             menuButton:setStrokeColor()
-            local menuButtonText = display.newText( transitionGroup, "Menu", _W/2, _H*0.7, native.systemFontBold, 35 )
+            local menuButtonText = display.newText( transitionGroup, "Menu", _W/2, _H*0.65, native.systemFontBold, 35 )
             menuButtonText:setFillColor()
 
+            local hint = HintSquirrel:new()
+            hint.x = 200
+            hint.y = 70
+            transitionGroup:insert(hint)
 
             local function restartGame()
                 storyboard.gotoScene("reloadScene")
