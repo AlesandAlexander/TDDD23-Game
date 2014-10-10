@@ -7,18 +7,6 @@ local numberOfFrames = 16
 -------------------------------------------------
 -- PRIVATE FUNCTIONS
 -------------------------------------------------
-
-function enemy:setPosition(pos)
-    if pos == "right" then
-        self.x = _W + 50
-    elseif pos == "left" then
-        self.x = _W - 50
-    elseif pos == "front" then
-        self.x = _W
-    elseif pos == "back" then
-        self.x = 0
-    end
-end
  
 -------------------------------------------------
 -- PUBLIC FUNCTIONS
