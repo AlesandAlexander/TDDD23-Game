@@ -82,14 +82,14 @@ function scene:createScene( event )
     local leftHand = display.newImageRect( group, "hand.png", 120, 120 )
     leftHand.x = 30
     leftHand.y = _H-80
-    leftHand.xScale = -1.07
-    leftHand.yScale = 1.07
+    leftHand.xScale = -1.1
+    leftHand.yScale = 1.1
     leftHand.rotation = 30
     local rightHand = display.newImageRect( group, "hand.png", 120, 120 )
     rightHand.x = _W-30
     rightHand.y = _H-80
-    rightHand.xScale = 1.07
-    rightHand.yScale = 1.07
+    rightHand.xScale = 0.9
+    rightHand.yScale = 0.9
     rightHand.rotation = -30
 
     local scoreManager = ScoreManager:new()
@@ -236,6 +236,7 @@ function scene:createScene( event )
                 time = time - 5
             end
             updateTime()
+
         end
     end
 
@@ -245,11 +246,55 @@ function scene:createScene( event )
     end
 
 
+
     local function moveHands()
-        if (rightHand ~= nil) then
-            moveLeftHand = transition.to( leftHand, {xScale=-1/rightHand.xScale, yScale=1/rightHand.yScale, time = 500} )
-            moveRightHand = transition.to( rightHand, {xScale=1/rightHand.xScale, yScale=1/rightHand.yScale, time = 500, onComplete=moveHands} )
+
+        local moveHandsIn
+        local moveHandsOut
+        local inTransition = easing.inOutBack
+        local outTransition = easing.outQuart
+        local time = 800
+
+        function moveHandsIn()
+            moveLeftHand = transition.to( leftHand, {
+                xScale=-0.9, 
+                yScale=0.9, 
+                time = time, 
+                transition=inTransition
+                } )
+
+            moveRightHand = transition.to( rightHand, {
+                xScale=1.1, 
+                yScale=1.1, 
+                time = time, 
+                transition=outTransition, 
+                onComplete=moveHandsOut} )
         end
+
+        function moveHandsOut()
+            moveLeftHand = transition.to( leftHand, {
+                xScale=-1.1, 
+                yScale=1.1, 
+                time = time, 
+                transition=outTransition
+                } )
+
+            moveRightHand = transition.to( rightHand, {
+                xScale=0.9, 
+                yScale=0.9, 
+                time = time, 
+                transition=inTransition, 
+                onComplete=moveHandsIn} )
+
+        end
+
+
+        moveHandsIn()
+        
+        --if (rightHand ~= nil) then
+        --    moveLeftHand = transition.to( leftHand, {xScale=-1/rightHand.xScale, yScale=1/rightHand.yScale, time = 500, transition=easing.inQuart} )
+        --    moveRightHand = transition.to( rightHand, {xScale=1/rightHand.xScale, yScale=1/rightHand.yScale, time = 500, transition=easing.inQuart, onComplete=moveHands} )
+        --end
     end
 
     local function removeHands()
@@ -259,8 +304,8 @@ function scene:createScene( event )
             display.remove( leftHand )
             leftHand = nil
         end
-        transition.to( rightHand, {xScale=0.01, yScale=0.01, time = 300} )
-        transition.to( leftHand, {xScale=0.01, yScale=0.01, time = 300, onComplete=deleteHands} )
+        transition.to( rightHand, {xScale=0.01, yScale=0.01, time = 300, transition=easing.inBack} )
+        transition.to( leftHand, {xScale=0.01, yScale=0.01, time = 300, transition=easing.inBack, onComplete=deleteHands} )
     end
 
 
