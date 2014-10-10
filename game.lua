@@ -389,7 +389,7 @@ function scene:createScene( event )
 
         local function menu()
             local transitionGroup = display.newGroup( )
-            transitionGroup.y = 120
+            transitionGroup.y = 100
 
             local rope = display.newImageRect( transitionGroup, "rope.png", 70, 720)
             rope:scale( 0.5, 0.5 )
@@ -402,9 +402,9 @@ function scene:createScene( event )
             popup:setStrokeColor()
 
 
-            local highScoreText = display.newText(transitionGroup, "Your score was", _W/2, _H*0.35, native.systemFontBold, 30)
+            local highScoreText = display.newText(transitionGroup, "You survived", _W/2, _H*0.35, native.systemFontBold, 30)
             highScoreText:setFillColor()
-            local highScoreNumber = display.newText(transitionGroup, player.score, _W/2, _H*0.42, native.systemFontBold, 30)
+            local highScoreNumber = display.newText(transitionGroup, player.score .. " seconds", _W/2, _H*0.42, native.systemFontBold, 30)
             transitionGroup:insert(highScoreNumber)
             highScoreNumber:setFillColor()
 
