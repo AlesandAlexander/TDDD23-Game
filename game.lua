@@ -74,7 +74,7 @@ function scene:createScene( event )
     leftButton.alpha = 0.01
     rightButton.alpha = 0.01
     gameStarter.alpha = 0.01
-    local time = 15
+    local time = 5
     local timeGraphic = display.newText( "Time: " .. time, _W-50, 20, native.systemFontBold, 25)
     timeGraphic:setFillColor()
     group:insert(timeGraphic)
@@ -285,60 +285,107 @@ function scene:createScene( event )
         locked = true
         Runtime:removeEventListener( "touch", rightClick )
         Runtime:removeEventListener( "touch", leftClick )
-        tree:dispose()
-        player:stopSprite()    
+        tree:dispose()   
         timer.cancel( countDownTimer )
         timer.cancel( scoreTimer )
         Runtime:removeEventListener( "enterFrame", gameLoop )
     end
 
     function showGameOver()
-        local transitionGroup = display.newGroup( )
+
         stopTimers()
-        local popup = display.newRoundedRect( transitionGroup, _W/2, _H/2, _W-100, _H-200, 5 )
-        popup.strokeWidth = 3
-        popup:setFillColor(255,255,0)
-        popup:setStrokeColor()
 
-        local rope = display.newImageRect( transitionGroup, "rope.png", 256, 256)
-        rope.x = _W/2
-        rope.y = -30
-
-        local highScoreText = display.newText(transitionGroup, "Your score was", _W/2, _H*0.35, native.systemFontBold, 30)
-        highScoreText:setFillColor()
-        local highScoreNumber = display.newText(transitionGroup, player.score, _W/2, _H*0.42, native.systemFontBold, 30)
-        transitionGroup:insert(highScoreNumber)
-        highScoreNumber:setFillColor()
-
-        local restartButton = display.newRoundedRect( transitionGroup, _W/2, _H*0.6, _W*0.6, _H/12, 5 )
-        restartButton.strokeWidth = 3
-        restartButton:setFillColor(255,255,0)
-        restartButton:setStrokeColor()
-        local restartButtonText = display.newText( transitionGroup, "Retry", _W/2, _H*0.6, native.systemFontBold, 35 )
-        transitionGroup:insert(restartButtonText)
-        restartButtonText:setFillColor()
-
-        local menuButton = display.newRoundedRect( transitionGroup, _W/2, _H*0.7, _W*0.6, _H/12, 5 )
-        transitionGroup:insert(menuButton)
-        menuButton.strokeWidth = 3
-        menuButton:setFillColor(255,255,0)
-        menuButton:setStrokeColor()
-        local menuButtonText = display.newText( transitionGroup, "Menu", _W/2, _H*0.7, native.systemFontBold, 35 )
-        menuButtonText:setFillColor()
-
-
-        local function restartGame()
-            storyboard.gotoScene("reloadScene")
+        local function explode()
+            player:stopSprite() 
+            display.remove( player )
+            local crashGroup = display.newGroup( )
+            local part1 = display.newImageRect( crashGroup, "part1.png", 56, 90 )
+            part1.x = player.x
+            part1.y = player.y
+            local part2 = display.newImageRect( crashGroup, "part2.png", 56, 90 )
+            part2.x = player.x
+            part2.y = player.y
+            local part3 = display.newImageRect( crashGroup, "part3.png", 56, 90 )
+            part3.x = player.x
+            part3.y = player.y
+            local part4 = display.newImageRect( crashGroup, "part4.png", 56, 90 )
+            part4.x = player.x
+            part4.y = player.y
+            local part5 = display.newImageRect( crashGroup, "part5.png", 56, 90 )
+            part5.x = player.x
+            part5.y = player.y
+            local part6 = display.newImageRect( crashGroup, "part6.png", 56, 90 )
+            part6.x = player.x
+            part6.y = player.y
+            group:insert(crashGroup)
+            physics.setGravity( 0, 10 )
+            physics.addBody( part1, "dynamic" )
+            physics.addBody( part2, "dynamic" )
+            physics.addBody( part3, "dynamic" )
+            physics.addBody( part4, "dynamic" )
+            physics.addBody( part5, "dynamic" )
+            physics.addBody( part6, "dynamic" )
+            for i = #crashGroup, 1, -1 do
+                local direction = math.random(0,1)
+                if (direction > 0.5) then
+                    crashGroup[i]:setLinearVelocity( math.random(10,20), math.random(10,20) )
+                else
+                    crashGroup[i]:setLinearVelocity( math.random(-10,-20), math.random(-10,-20) )
+                end
+                crashGroup[i].angularVelocity = math.random(-500, 500)
+            end
         end
 
-        local function goToMenu()
-            storyboard.gotoScene( "menu" )
+        timer.performWithDelay( 10, explode )
+
+        local function menu()
+            local transitionGroup = display.newGroup( )
+            local popup = display.newRoundedRect( transitionGroup, _W/2, _H/2, _W-100, _H-200, 5 )
+            popup.strokeWidth = 3
+            popup:setFillColor(255,255,0)
+            popup:setStrokeColor()
+
+            local rope = display.newImageRect( transitionGroup, "rope.png", 256, 256)
+            rope.x = _W/2
+            rope.y = -30
+
+            local highScoreText = display.newText(transitionGroup, "Your score was", _W/2, _H*0.35, native.systemFontBold, 30)
+            highScoreText:setFillColor()
+            local highScoreNumber = display.newText(transitionGroup, player.score, _W/2, _H*0.42, native.systemFontBold, 30)
+            transitionGroup:insert(highScoreNumber)
+            highScoreNumber:setFillColor()
+
+            local restartButton = display.newRoundedRect( transitionGroup, _W/2, _H*0.6, _W*0.6, _H/12, 5 )
+            restartButton.strokeWidth = 3
+            restartButton:setFillColor(255,255,0)
+            restartButton:setStrokeColor()
+            local restartButtonText = display.newText( transitionGroup, "Retry", _W/2, _H*0.6, native.systemFontBold, 35 )
+            transitionGroup:insert(restartButtonText)
+            restartButtonText:setFillColor()
+
+            local menuButton = display.newRoundedRect( transitionGroup, _W/2, _H*0.7, _W*0.6, _H/12, 5 )
+            transitionGroup:insert(menuButton)
+            menuButton.strokeWidth = 3
+            menuButton:setFillColor(255,255,0)
+            menuButton:setStrokeColor()
+            local menuButtonText = display.newText( transitionGroup, "Menu", _W/2, _H*0.7, native.systemFontBold, 35 )
+            menuButtonText:setFillColor()
+
+
+            local function restartGame()
+                storyboard.gotoScene("reloadScene")
+            end
+
+            local function goToMenu()
+                storyboard.gotoScene( "menu" )
+            end
+            group:insert(transitionGroup)
+            transition.from( transitionGroup, {time = 800, y = (-_H/2), transition=easing.outBounce} )
+            restartButton:addEventListener( "tap", restartGame )
+            menuButton:addEventListener( "tap", goToMenu )
         end
 
-        group:insert(transitionGroup)
-        transition.from( transitionGroup, {time = 800, y = (-_H/2), transition=easing.outCubic} )
-        restartButton:addEventListener( "tap", restartGame )
-        menuButton:addEventListener( "tap", goToMenu )
+        timer.performWithDelay( 1500, menu )
     end
 
     moveHands()
@@ -437,7 +484,7 @@ function scene:destroyScene( event )
     end
     background:dispose()
     tree:dispose()
-    player:stopSprite()    
+    --player:stopSprite()    
     timer.cancel( countDownTimer )
     timer.cancel( scoreTimer )
     Runtime:removeEventListener( "enterFrame", gameLoop )
