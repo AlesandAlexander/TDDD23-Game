@@ -11,25 +11,25 @@ function pack:new()
 
 	local speed = 10
 	local difficulty = 20
-	local rotateSpeed = 0;
+	local rotateSpeed = 0
 
-	local treePartOne = display.newImageRect( trunk, "tree.png", 120, 480 )
+	local treePartOne = display.newImageRect( trunk, "tree.png", _H/4, _H )
 	treePartOne.x = _W/2
 	treePartOne.y = _H/2
 
-	local treePartTwo = display.newImageRect( trunk, "tree.png", 120, 480 )
+	local treePartTwo = display.newImageRect( trunk, "tree.png", _H/4, _H )
 	treePartTwo.x = _W/2
 	treePartTwo.y = -_H*0.5
 
-	local treePartThree = display.newImageRect( trunk, "tree.png", 120, 480 )
-	treePartThree.x = _W/2 + 120
+	local treePartThree = display.newImageRect( trunk, "tree.png", _H/4, _H )
+	treePartThree.x = _W/2 + _H/4
 	treePartThree.y = _H/2
 
-	local treePartFour = display.newImageRect( trunk, "tree.png", 120, 480 )
-	treePartFour.x = _W/2 + 120
+	local treePartFour = display.newImageRect( trunk, "tree.png", _H/4, _H )
+	treePartFour.x = _W/2 + _H/4
 	treePartFour.y = -_H*0.5
 
-	local shadow = display.newImageRect(trunk, "shadow.png", 120, 480 )
+	local shadow = display.newImageRect(trunk, "shadow.png", _H/4, _H )
 	shadow.x = _W/2
 	shadow.y = _H/2
 

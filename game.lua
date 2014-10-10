@@ -3,6 +3,7 @@ scene = storyboard.newScene()
 physics = require("physics")
 local Tree = require("tree")
 local Player = require("player")
+local Laser = require("laser")
 local Background = require("background")
 local ScoreManager = require("scoreManager")
 
@@ -73,7 +74,7 @@ function scene:createScene( event )
     leftButton.alpha = 0.01
     rightButton.alpha = 0.01
     gameStarter.alpha = 0.01
-    local time = 5
+    local time = 15
     local timeGraphic = display.newText( "Time: " .. time, _W-50, 20, native.systemFontBold, 25)
     timeGraphic:setFillColor()
     group:insert(timeGraphic)
@@ -95,6 +96,9 @@ function scene:createScene( event )
 
     player = Player:new()
     group:insert(player)
+
+    laser = Laser:new()
+    group:insert(laser)
 
     local scoreCounter = display.newEmbossedText( { text=player.score, fontSize=30, align="center", x=_W/2, y=20 } )
     local color = 
@@ -168,6 +172,7 @@ function scene:createScene( event )
             time = 0
         end
         timeGraphic.text = "Time: " .. time
+        laser:setY(player.y+time*12-40)
         if (time <= 0 and (not gameOver)) then
             gameOver = true
             scoreManager:saveScore(player.score)
@@ -229,8 +234,8 @@ function scene:createScene( event )
                 event.other.isRemoved = true
                 notifyHit()
                 time = time - 5
-                updateTime()
             end
+            updateTime()
         end
     end
 
@@ -331,7 +336,7 @@ function scene:createScene( event )
         end
 
         group:insert(transitionGroup)
-        transition.from( transitionGroup, {time = 1200, y = (-_H/2), transition=easing.outCubic} )
+        transition.from( transitionGroup, {time = 800, y = (-_H/2), transition=easing.outCubic} )
         restartButton:addEventListener( "tap", restartGame )
         menuButton:addEventListener( "tap", goToMenu )
     end
