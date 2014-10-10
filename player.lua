@@ -4,6 +4,7 @@ function pack:new()
 
 	local sheetInfo = require("squirrel")
 	local myImageSheet = graphics.newImageSheet( "squirrel.png", sheetInfo:getSheet() )
+	local soundChannel
 
 	--local sheetData = { width=43, height=64, numFrames=9, sheetContentWidth=129, sheetContentHeight=192 }
 	--local sheet = graphics.newImageSheet( "ferret.png", sheetData )
@@ -17,6 +18,16 @@ function pack:new()
 
 	Player.x = _W/2
 	Player.y = _H*0.75
+
+	local function startSound()
+		local runSound = audio.loadSound( "run.mp3" )
+        soundChannel = audio.play( runSound, { loops=-1, volume=0 } )
+        audio.setVolume( 0.2, { channel=soundChannel } ) 
+	end
+
+	local function stopSound()
+    	audio.stop(soundChannel)
+	end
 
 	function Player:rotateLeft()
 		Player.rotation = -20
@@ -34,14 +45,9 @@ function pack:new()
 		timer.performWithDelay( rotateTime, stopRotation)
 	end
 
-
-	local function startSound()
-		local runSound = audio.loadSound( "run.mp3" )
-        local channel = audio.play( runSound, { loops=-1 } )
-	end
-
 	function Player:stopSprite()
 		Player:pause( )
+		stopSound()
 	end
 
 	function Player:start()
