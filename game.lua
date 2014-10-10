@@ -73,7 +73,7 @@ function scene:createScene( event )
     leftButton.alpha = 0.01
     rightButton.alpha = 0.01
     gameStarter.alpha = 0.01
-    local time = 100
+    local time = 5
     local timeGraphic = display.newText( "Time: " .. time, _W-50, 20, native.systemFontBold, 25)
     timeGraphic:setFillColor()
     group:insert(timeGraphic)

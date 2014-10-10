@@ -24,9 +24,8 @@ local ScoreManager = require("scoreManager")
 function scene:createScene( event )
     group = self.view
     local group = group
-    print("create highscore")
     local background = display.newImageRect( group, "bg.png", _W*9, _H )
-    background.x = _W/2
+    background.x = _W/2+_W
     background.y = _H/2
 
 	local backButton = display.newRoundedRect( group, _W/2, _H*0.8, _W*0.8, _H/12, 5 )
@@ -35,6 +34,13 @@ function scene:createScene( event )
     backButton:setStrokeColor()
     local backButtonText = display.newText( group, "Back", _W/2, _H*0.8, native.systemFontBold, 35 )
     backButtonText:setFillColor()
+
+
+    local scoreBackground = display.newRoundedRect( group, _W/2, _H*0.35, 200, _H*0.5, 5 )
+    scoreBackground.strokeWidth = 3
+    scoreBackground:setFillColor(255,255,0)
+    scoreBackground:setStrokeColor()
+
 
     scoreManager = ScoreManager:new()
 	local highscoreList = scoreManager:loadScore()
@@ -47,7 +53,7 @@ function scene:createScene( event )
     local function showMenu()
         print("button click")
         display.remove( group )
-        storyboard.gotoScene( "menu")
+        storyboard.gotoScene( "menu", {effect="slideLeft", time=400})
     end
 
     backButton:addEventListener( "tap", showMenu )

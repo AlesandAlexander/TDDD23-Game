@@ -45,12 +45,12 @@ function scene:createScene( event )
 
     local function startGame()
         display.remove( group )
-        storyboard.gotoScene( "game", {effect="crossFade", time=1000})
+        storyboard.gotoScene( "game", {effect="slideLeft", time=400})
     end
 
     local function showHighscore()
         display.remove( group )
-        storyboard.gotoScene( "highscoreScreen", {effect="slideLeft", time=500})
+        storyboard.gotoScene( "highscoreScreen", {effect="slideRight", time=400})
     end
 
     playButton:addEventListener( "tap", startGame )

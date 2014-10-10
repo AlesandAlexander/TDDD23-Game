@@ -3,9 +3,10 @@ local pack = {}
 function pack:new()
 
 	local image = display.newImageRect( "bg.png", _W*9, _H )
-	image.anchorX=1
-	image.x = _W
+	image.x = _W*4
 	image.y =_H/2
+
+	image.anchorX=1
 	local rotationSpeed = 70
 	local scrollSpeed = 0
 
