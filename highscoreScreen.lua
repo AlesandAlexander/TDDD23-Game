@@ -14,7 +14,7 @@ local ScoreManager = require("scoreManager")
 
 
 -- local forward references should go here --
-local showMenu
+local onKeyEvent
 
 ---------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
@@ -51,7 +51,12 @@ function scene:createScene( event )
 	end
 
 
-    local function onKeyEvent( event )
+    local function showMenu()
+        display.remove( group )
+        storyboard.gotoScene( "menu", {effect="slideLeft", time=400})
+    end
+
+    function onKeyEvent( event )
         if ((event.keyName == "back") and (system.getInfo("platformName") == "Android")) or 
             ((event.keyName == "q") and (system.getInfo("environment") == "simulator" )) then
             showMenu()
@@ -60,15 +65,7 @@ function scene:createScene( event )
     end
 
 
-    function showMenu()
-        Runtime:removeEventListener("key", onKeyEvent)
-        display.remove( group )
-        storyboard.gotoScene( "menu", {effect="slideLeft", time=400})
-    end
-
-
     backButton:addEventListener( "tap", showMenu )
-    Runtime:addEventListener( "key", onKeyEvent );
 
 end
 
@@ -91,6 +88,8 @@ end
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene( event )
     local group = self.view
+    Runtime:addEventListener( "key", onKeyEvent );
+
     -----------------------------------------------------------------------------
 
     --      INSERT code here (e.g. start timers, load audio, start listeners, etc.)
@@ -129,6 +128,7 @@ end
 -- Called prior to the removal of scene's "view" (display group)
 function scene:destroyScene( event )
     local group = self.view
+    Runtime:removeEventListener("key", onKeyEvent)
 
     -----------------------------------------------------------------------------
 

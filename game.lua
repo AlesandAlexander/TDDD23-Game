@@ -326,8 +326,6 @@ function scene:createScene( event )
         end
     end
 
-    Runtime:addEventListener( "key", onKeyEvent );
-
 end
 
 
@@ -347,6 +345,7 @@ end
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene( event )
     local group = self.view
+    Runtime:addEventListener( "key", onKeyEvent );
 
     -----------------------------------------------------------------------------
 
