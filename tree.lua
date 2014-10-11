@@ -35,6 +35,11 @@ function pack:new()
 	shadow.x = _W/2
 	shadow.y = _H/2
 
+	local contourRight = display.newRect(trunk, shadow.x+width/2, _H/2, 4, _H )
+	contourRight:setFillColor( black )
+	local contourLeft = display.newRect(trunk, shadow.x-width/2, _H/2, 4, _H )
+	contourLeft:setFillColor( black )
+
 	local mask = graphics.newMask( "images/mask2.png" )
 	trunk:setMask( mask )
 	trunk.maskX = _W/2
