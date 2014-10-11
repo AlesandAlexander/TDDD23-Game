@@ -59,37 +59,37 @@ function pack:new()
         rope.x = _W/2
         rope.y = -100
 
-        local popup = display.newRoundedRect( transitionGroup, _W/2, _H/2, _W-80, _H-250, 5 )
+        local popup = display.newRoundedRect( transitionGroup, _W/2, _H/2, _W-80, _H-300, 5 )
         popup.strokeWidth = 3
         popup:setFillColor(255,255,0)
         popup:setStrokeColor()
 
 
-        local highScoreText = display.newText(transitionGroup, "You survived", _W/2, _H*0.35, native.systemFontBold, 30)
+        local highScoreText = display.newText(transitionGroup, "You survived", _W/2, 260, native.systemFontBold, 30)
         highScoreText:setFillColor()
-        local highScoreNumber = display.newText(transitionGroup, score .. " seconds", _W/2, _H*0.42, native.systemFontBold, 30)
+        local highScoreNumber = display.newText(transitionGroup, score .. " seconds", _W/2, 300, native.systemFontBold, 30)
         transitionGroup:insert(highScoreNumber)
         highScoreNumber:setFillColor()
 
-        local restartButton = display.newRoundedRect( transitionGroup, _W/2, _H*0.55, _W*0.6, _H/12, 5 )
+        local restartButton = display.newRoundedRect( transitionGroup, _W/2, 370, _W*0.6, _H/12, 5 )
         restartButton.strokeWidth = 3
         restartButton:setFillColor(255,255,0)
         restartButton:setStrokeColor()
-        local restartButtonText = display.newText( transitionGroup, "Retry", _W/2, _H*0.55, native.systemFontBold, 35 )
+        local restartButtonText = display.newText( transitionGroup, "Retry", _W/2, 370, native.systemFontBold, 35 )
         transitionGroup:insert(restartButtonText)
         restartButtonText:setFillColor()
 
-        local menuButton = display.newRoundedRect( transitionGroup, _W/2, _H*0.65, _W*0.6, _H/12, 5 )
+        local menuButton = display.newRoundedRect( transitionGroup, _W/2, 440, _W*0.6, _H/12, 5 )
         transitionGroup:insert(menuButton)
         menuButton.strokeWidth = 3
         menuButton:setFillColor(255,255,0)
         menuButton:setStrokeColor()
-        local menuButtonText = display.newText( transitionGroup, "Menu", _W/2, _H*0.65, native.systemFontBold, 35 )
+        local menuButtonText = display.newText( transitionGroup, "Menu", _W/2, 440, native.systemFontBold, 35 )
         menuButtonText:setFillColor()
 
         local hint = HintSquirrel:new()
         hint.x = 200
-        hint.y = 70
+        hint.y = 120
         transitionGroup:insert(hint)
 
         local function restartGame()

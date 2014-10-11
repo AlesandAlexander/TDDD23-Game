@@ -6,12 +6,12 @@ function pack:new()
 	local squirrel = display.newImageRect( Hint, "images/hintSquirrel.png", 350, 350 )
 	squirrel.x = -40
 	squirrel.y = 20
-	squirrel:scale( 0.4, 0.35 )
+	squirrel:scale( 0.5, 0.5 )
 
 	local bubble = display.newImageRect( Hint, "images/bubble.png", 350, 350 )
-	bubble.x = 45
-	bubble.y = -75
-	bubble:scale( 0.4, 0.3 )
+	bubble.x = 75
+	bubble.y = -95
+	bubble:scale( 0.5, 0.4 )
 
 	local textBank = 
 	{
@@ -30,8 +30,8 @@ function pack:new()
 	{
 	    parent = Hint,
 	    text = textBank[math.random(1, #textBank)],     
-	    x = 40,
-	    y = -55,
+	    x = 70,
+	    y = -75,
 	    width = bubble.width*0.4-30,
 	    height = bubble.height*0.4-30,
 	    font = native.systemFont,   

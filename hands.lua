@@ -3,18 +3,18 @@ local pack = {}
 function pack:new()
 	local Hands = display.newGroup( )
 
-    local leftHand = display.newImageRect( Hands, "images/hand.png", 120, 120 )
-    leftHand.x = 30
-    leftHand.y = _H-80
+    local leftHand = display.newImageRect( Hands, "images/hand.png", 145, 145 )
+    leftHand.x = 50
+    leftHand.y = _H-90
     leftHand.xScale = -1.1
     leftHand.yScale = 1.1
-    leftHand.rotation = 30
-    local rightHand = display.newImageRect( Hands, "images/hand.png", 120, 120 )
-    rightHand.x = _W-30
-    rightHand.y = _H-80
+    leftHand.rotation = 25
+    local rightHand = display.newImageRect( Hands, "images/hand.png", 145, 145 )
+    rightHand.x = _W-50
+    rightHand.y = _H-90
     rightHand.xScale = 0.9
     rightHand.yScale = 0.9
-    rightHand.rotation = -30
+    rightHand.rotation = -25
 
     local moveRightHand
     local moveLeftHand
