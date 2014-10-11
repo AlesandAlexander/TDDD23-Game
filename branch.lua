@@ -15,7 +15,7 @@ local numberOfFrames = 16
 function enemy.new(position)    -- constructor
     --local self = display.newGroup()
 
-    local myImageSheet = graphics.newImageSheet( "branchsheet.png", sheetInfo:getSheet() )
+    local myImageSheet = graphics.newImageSheet( "images/branchsheet.png", sheetInfo:getSheet() )
     local sequenceData = {
         { 
             name = "turn",  --name of animation sequence

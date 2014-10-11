@@ -2,7 +2,7 @@ local pack = {}
 
 function pack:new()
 
-	local image = display.newImageRect( "bg.png", _W*9, _H )
+	local image = display.newImageRect( "images/bg.png", _W*9, _H )
 	image.x = _W*4
 	image.y =_H/2
 

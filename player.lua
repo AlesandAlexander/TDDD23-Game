@@ -3,7 +3,7 @@ local pack = {}
 function pack:new()
 
 	local sheetInfo = require("squirrel")
-	local myImageSheet = graphics.newImageSheet( "squirrel.png", sheetInfo:getSheet() )
+	local myImageSheet = graphics.newImageSheet( "images/squirrel.png", sheetInfo:getSheet() )
 	local soundChannel
 
 	--local sheetData = { width=43, height=64, numFrames=9, sheetContentWidth=129, sheetContentHeight=192 }
@@ -20,7 +20,7 @@ function pack:new()
 	Player.y = _H*0.75
 
 	local function startSound()
-		local runSound = audio.loadSound( "run.mp3" )
+		local runSound = audio.loadSound( "sound/run.mp3" )
         soundChannel = audio.play( runSound, { loops=-1, volume=0 } )
         audio.setVolume( 0.2, { channel=soundChannel } ) 
 	end

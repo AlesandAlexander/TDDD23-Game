@@ -16,7 +16,7 @@ function friend.new(position)    -- constructor
     --local self = display.newGroup()
 
     local sheetInfo = require("can")
-    local myImageSheet = graphics.newImageSheet( "can.png", sheetInfo:getSheet() )
+    local myImageSheet = graphics.newImageSheet( "images/can.png", sheetInfo:getSheet() )
     local powerUp = display.newSprite( myImageSheet , {frames={1,2,3}, time=700} )
     powerUp:scale( 0.4, 0.4 )
     powerUp:play()

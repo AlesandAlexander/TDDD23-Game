@@ -24,7 +24,7 @@ local ScoreManager = require("scoreManager")
 function scene:createScene( event )
     group = self.view
     local group = group
-    local background = display.newImageRect( group, "bg.png", _W*9, _H )
+    local background = display.newImageRect( group, "images/bg.png", _W*9, _H )
     background.x = _W/2+_W
     background.y = _H/2
 

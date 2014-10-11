@@ -6,7 +6,8 @@ local Player = require("player")
 local Laser = require("laser")
 local Background = require("background")
 local ScoreManager = require("scoreManager")
-local HintSquirrel = require("hintSquirrel")
+local GameOver = require("gameOver")
+local Hands = require("hands")
 
 --physics.setDrawMode( "hybrid" )
 
@@ -28,8 +29,6 @@ local countDownTimer
 local scoreTimer
 local player
 local group
-local moveRightHand
-local moveLeftHand
 local runRight
 local runLeft
 local showGameOver
@@ -54,9 +53,9 @@ function scene:createScene( event )
     local locked = false
     local gameOver = false
 
-    local speedSound = audio.loadSound( "bzzumm.mp3" )
-    local crashSound = audio.loadSound( "crash.mp3" )
-    local heheSound = audio.loadSound( "hehe.mp3" )
+    local speedSound = audio.loadSound( "sound/bzzumm.mp3" )
+    local crashSound = audio.loadSound( "sound/crash.mp3" )
+    local heheSound = audio.loadSound( "sound/hehe.mp3" )
 
 
     -- 0 = none, 1 = left, 2 = right
@@ -65,9 +64,7 @@ function scene:createScene( event )
     local runRight
     local runLeft
     background = Background:new()
-    group:insert(background)
     tree = Tree:new()
-    group:insert(tree)
     local despawner = display.newRect(_W/2, _H+200, _W*2, 100 )
     local despawnerRight = display.newRect( _W+200, _H/2-51+200, 100, _H )
     local despawnerLeft = display.newRect( -200, _H/2-51+200, 100, _H )
@@ -81,29 +78,12 @@ function scene:createScene( event )
     local time = 15
     local timeGraphic = display.newText( "Time: " .. time, _W-50, 20, native.systemFontBold, 25)
     timeGraphic:setFillColor()
-    group:insert(timeGraphic)
-
-    local leftHand = display.newImageRect( group, "hand.png", 120, 120 )
-    leftHand.x = 30
-    leftHand.y = _H-80
-    leftHand.xScale = -1.1
-    leftHand.yScale = 1.1
-    leftHand.rotation = 30
-    local rightHand = display.newImageRect( group, "hand.png", 120, 120 )
-    rightHand.x = _W-30
-    rightHand.y = _H-80
-    rightHand.xScale = 0.9
-    rightHand.yScale = 0.9
-    rightHand.rotation = -30
 
     local scoreManager = ScoreManager:new()
 
+    hands = Hands:new()
     player = Player:new()
-    group:insert(player)
-
     laser = Laser:new()
-    group:insert(laser)
-
     local scoreCounter = display.newEmbossedText( { text=player.score, fontSize=30, align="center", x=_W/2, y=20 } )
     local color = 
     {
@@ -111,8 +91,14 @@ function scene:createScene( event )
         shadow = { r=0, g=0, b=0 }
     }
     scoreCounter:setEmbossColor( color )
-    group:insert(scoreCounter)
 
+    group:insert(background)
+    group:insert(tree)
+    group:insert(timeGraphic)
+    group:insert(player)
+    group:insert(laser)
+    group:insert(scoreCounter)
+    group:insert(hands)
     group:insert(rightButton)
     group:insert(leftButton)
     group:insert(gameStarter)
@@ -222,13 +208,13 @@ function scene:createScene( event )
     local function onPlayerCollision(self, event)
         if (event.phase == "began") then
             if event.other.type == "friend" then
-                local speedSoundChannal = audio.play( speedSound )
+                local speedSoundChannel = audio.play( speedSound )
                 display.remove( event.other )
                 event.other.isRemoved = true
                 time = time + 10
                 tree:setSpeed(tree:getSpeed() + 1)
             elseif (event.other.isRemoved ~= true) then
-                local crashSoundChannal = audio.play( crashSound )
+                local crashSoundChannel = audio.play( crashSound )
                 local direction = math.random(0, 1)
                 local speed = math.random(30, 40) * tree:getSpeed()
                 if (direction > 0.5) then
@@ -252,69 +238,6 @@ function scene:createScene( event )
     end
 
 
-
-    local function moveHands()
-
-        local moveHandsIn
-        local moveHandsOut
-        local inTransition = easing.inOutBack
-        local outTransition = easing.outQuart
-        local time = 800
-
-        function moveHandsIn()
-            moveLeftHand = transition.to( leftHand, {
-                xScale=-0.9, 
-                yScale=0.9, 
-                time = time, 
-                transition=inTransition
-                } )
-
-            moveRightHand = transition.to( rightHand, {
-                xScale=1.1, 
-                yScale=1.1, 
-                time = time, 
-                transition=outTransition, 
-                onComplete=moveHandsOut} )
-        end
-
-        function moveHandsOut()
-            moveLeftHand = transition.to( leftHand, {
-                xScale=-1.1, 
-                yScale=1.1, 
-                time = time, 
-                transition=outTransition
-                } )
-
-            moveRightHand = transition.to( rightHand, {
-                xScale=0.9, 
-                yScale=0.9, 
-                time = time, 
-                transition=inTransition, 
-                onComplete=moveHandsIn} )
-
-        end
-
-
-        moveHandsIn()
-        
-        --if (rightHand ~= nil) then
-        --    moveLeftHand = transition.to( leftHand, {xScale=-1/rightHand.xScale, yScale=1/rightHand.yScale, time = 500, transition=easing.inQuart} )
-        --    moveRightHand = transition.to( rightHand, {xScale=1/rightHand.xScale, yScale=1/rightHand.yScale, time = 500, transition=easing.inQuart, onComplete=moveHands} )
-        --end
-    end
-
-    local function removeHands()
-        local function deleteHands()
-            display.remove( rightHand )
-            rightHand = nil
-            display.remove( leftHand )
-            leftHand = nil
-        end
-        transition.to( rightHand, {xScale=0.01, yScale=0.01, time = 300, transition=easing.inBack} )
-        transition.to( leftHand, {xScale=0.01, yScale=0.01, time = 300, transition=easing.inBack, onComplete=deleteHands} )
-    end
-
-
     local function startGame(event)
         if (event.phase == "began") then 
             tree:start(10, 20) 
@@ -323,9 +246,7 @@ function scene:createScene( event )
             scoreTimer = timer.performWithDelay( 1000, increaseScore, 0)
             display.remove( gameStarter )
             gameStarter = nil
-            transition.cancel(moveRightHand)
-            transition.cancel(moveLeftHand)
-            removeHands()
+            hands:removeHands()
         end
     end
 
@@ -341,116 +262,6 @@ function scene:createScene( event )
         timer.cancel( scoreTimer )
         Runtime:removeEventListener( "enterFrame", gameLoop )
     end
-
-    function showGameOver()
-
-        stopTimers()
-
-        local function explode()
-            player:stopSprite() 
-            display.remove( player )
-            local crashGroup = display.newGroup( )
-            local part1 = display.newImageRect( crashGroup, "part1.png", 56, 90 )
-            part1.x = player.x
-            part1.y = player.y
-            local part2 = display.newImageRect( crashGroup, "part2.png", 56, 90 )
-            part2.x = player.x
-            part2.y = player.y
-            local part3 = display.newImageRect( crashGroup, "part3.png", 56, 90 )
-            part3.x = player.x
-            part3.y = player.y
-            local part4 = display.newImageRect( crashGroup, "part4.png", 56, 90 )
-            part4.x = player.x
-            part4.y = player.y
-            local part5 = display.newImageRect( crashGroup, "part5.png", 56, 90 )
-            part5.x = player.x
-            part5.y = player.y
-            local part6 = display.newImageRect( crashGroup, "part6.png", 56, 90 )
-            part6.x = player.x
-            part6.y = player.y
-            group:insert(crashGroup)
-            physics.setGravity( 0, 10 )
-            physics.addBody( part1, "dynamic" )
-            physics.addBody( part2, "dynamic" )
-            physics.addBody( part3, "dynamic" )
-            physics.addBody( part4, "dynamic" )
-            physics.addBody( part5, "dynamic" )
-            physics.addBody( part6, "dynamic" )
-
-            for i=1,60 do
-                local blood = display.newCircle( player.x+math.random(-50,50), player.y+math.random(-50,50), 3 )
-                blood:setFillColor( 0.8,0,0 )
-                crashGroup:insert( blood )
-                physics.addBody( blood, "dynamic" )
-            end
-
-            for i=crashGroup.numChildren, 1, -1 do
-                crashGroup[i]:setLinearVelocity( math.random(-50,50), math.random(-500, 100) )
-                crashGroup[i].angularVelocity = math.random(-500, 500)
-            end
-        end
-
-        timer.performWithDelay( 10, explode )
-
-        local function menu()
-            local transitionGroup = display.newGroup( )
-            transitionGroup.y = 100
-
-            local rope = display.newImageRect( transitionGroup, "rope.png", 70, 720)
-            rope:scale( 0.5, 0.5 )
-            rope.x = _W/2
-            rope.y = -100
-
-            local popup = display.newRoundedRect( transitionGroup, _W/2, _H/2, _W-80, _H-250, 5 )
-            popup.strokeWidth = 3
-            popup:setFillColor(255,255,0)
-            popup:setStrokeColor()
-
-
-            local highScoreText = display.newText(transitionGroup, "You survived", _W/2, _H*0.35, native.systemFontBold, 30)
-            highScoreText:setFillColor()
-            local highScoreNumber = display.newText(transitionGroup, player.score .. " seconds", _W/2, _H*0.42, native.systemFontBold, 30)
-            transitionGroup:insert(highScoreNumber)
-            highScoreNumber:setFillColor()
-
-            local restartButton = display.newRoundedRect( transitionGroup, _W/2, _H*0.55, _W*0.6, _H/12, 5 )
-            restartButton.strokeWidth = 3
-            restartButton:setFillColor(255,255,0)
-            restartButton:setStrokeColor()
-            local restartButtonText = display.newText( transitionGroup, "Retry", _W/2, _H*0.55, native.systemFontBold, 35 )
-            transitionGroup:insert(restartButtonText)
-            restartButtonText:setFillColor()
-
-            local menuButton = display.newRoundedRect( transitionGroup, _W/2, _H*0.65, _W*0.6, _H/12, 5 )
-            transitionGroup:insert(menuButton)
-            menuButton.strokeWidth = 3
-            menuButton:setFillColor(255,255,0)
-            menuButton:setStrokeColor()
-            local menuButtonText = display.newText( transitionGroup, "Menu", _W/2, _H*0.65, native.systemFontBold, 35 )
-            menuButtonText:setFillColor()
-
-            local hint = HintSquirrel:new()
-            hint.x = 200
-            hint.y = 70
-            transitionGroup:insert(hint)
-
-            local function restartGame()
-                storyboard.gotoScene("reloadScene")
-            end
-
-            local function goToMenu()
-                storyboard.gotoScene( "menu" )
-            end
-            group:insert(transitionGroup)
-            transition.from( transitionGroup, {time = 800, y = (-_H/2), transition=easing.outBounce} )
-            restartButton:addEventListener( "tap", restartGame )
-            menuButton:addEventListener( "tap", goToMenu )
-        end
-
-        timer.performWithDelay( 1500, menu )
-    end
-
-    moveHands()
 
     rightButton:addEventListener( "touch", rightClick )
     leftButton:addEventListener( "touch", leftClick )
@@ -479,12 +290,26 @@ function scene:createScene( event )
         storyboard.gotoScene("menu")
     end
 
-end
+    function showDeath()
+        local gameOver = GameOver:new()
+        group:insert(gameOver)
 
-function showDeath()
-    local deathSound = audio.loadSound( "death.mp3" )
-    local deathSoundChannel = audio.play( deathSound )
-    timer.performWithDelay( 1300, showGameOver )
+        local deathSound = audio.loadSound( "sound/death.mp3" )
+        local deathSoundChannel = audio.play( deathSound )
+        timer.performWithDelay( 1300,         
+            function() 
+                stopTimers()
+                player:stopSprite() 
+                display.remove( player )
+                gameOver:explode(player.x, player.y)
+            end )
+
+        timer.performWithDelay( 2800,         
+            function() 
+                gameOver:showMenu(player.score)
+            end )
+    end
+
 end
 
 

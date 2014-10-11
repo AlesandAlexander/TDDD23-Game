@@ -22,7 +22,7 @@ scene = storyboard.newScene()
 function scene:createScene( event )
     group = self.view
 
-    local background = display.newImageRect( group, "bg.png", _W*9, _H )
+    local background = display.newImageRect( group, "images/bg.png", _W*9, _H )
     background.x = _W/2
     background.y = _H/2
 

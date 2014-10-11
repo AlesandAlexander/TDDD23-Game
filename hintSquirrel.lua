@@ -3,12 +3,12 @@ local pack = {}
 function pack:new()
 
 	local Hint = display.newGroup( )
-	local squirrel = display.newImageRect( Hint, "hintSquirrel.png", 350, 350 )
+	local squirrel = display.newImageRect( Hint, "images/hintSquirrel.png", 350, 350 )
 	squirrel.x = -40
 	squirrel.y = 20
 	squirrel:scale( 0.4, 0.35 )
 
-	local bubble = display.newImageRect( Hint, "bubble.png", 350, 350 )
+	local bubble = display.newImageRect( Hint, "images/bubble.png", 350, 350 )
 	bubble.x = 45
 	bubble.y = -75
 	bubble:scale( 0.4, 0.3 )
