@@ -53,8 +53,11 @@ function scene:createScene( event )
     --
     local locked = false
     local gameOver = false
+
     local speedSound = audio.loadSound( "bzzumm.mp3" )
     local crashSound = audio.loadSound( "crash.mp3" )
+    local heheSound = audio.loadSound( "hehe.mp3" )
+
 
     -- 0 = none, 1 = left, 2 = right
     local nextAction = 0
@@ -177,7 +180,9 @@ function scene:createScene( event )
         if (time <= 0 and (not gameOver)) then
             gameOver = true
             scoreManager:saveScore(player.score)
-            showGameOver()
+            showDeath()
+        elseif (time == 2) then
+            local heheSoundChannel = audio.play( heheSound )
         end
     end
 
@@ -474,6 +479,12 @@ function scene:createScene( event )
         storyboard.gotoScene("menu")
     end
 
+end
+
+function showDeath()
+    local deathSound = audio.loadSound( "death.mp3" )
+    local deathSoundChannel = audio.play( deathSound )
+    timer.performWithDelay( 1300, showGameOver )
 end
 
 

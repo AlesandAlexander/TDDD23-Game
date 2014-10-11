@@ -20,7 +20,9 @@ function pack:new()
 		"Watch out for branches!",
 		"It's hard to climb that fast!",
 		"Drink only when you need it!",
-		"Ouch, that hurts!"
+		"Ouch, that hurts!", 
+		"Drink only to survive!",
+		"Don't let the hunter aim at me!"
 	}
 
 
