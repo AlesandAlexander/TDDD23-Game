@@ -108,8 +108,6 @@ function scene:createScene( event )
 
     local endGame
 
-
-
     local function unLock()
         if nextAction == 1 then
             runLeft()  
@@ -301,6 +299,7 @@ function scene:createScene( event )
                 stopTimers()
                 player:stopSprite() 
                 display.remove( player )
+                notifyHit()
                 gameOver:explode(player.x, player.y)
             end )
 
