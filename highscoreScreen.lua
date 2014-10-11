@@ -36,7 +36,7 @@ function scene:createScene( event )
     backButtonText:setFillColor()
 
 
-    local scoreBackground = display.newRoundedRect( group, _W/2, _H*0.35, 200, _H*0.5, 5 )
+    local scoreBackground = display.newRoundedRect( group, _W/2, 240, 200, 380, 5 )
     scoreBackground.strokeWidth = 3
     scoreBackground:setFillColor(255,255,0)
     scoreBackground:setStrokeColor()
@@ -46,7 +46,7 @@ function scene:createScene( event )
 	local highscoreList = scoreManager:loadScore()
 
 	for i=1,#highscoreList do
-		local score = display.newText( group, highscoreList[i], _W/2, _H*0.1+i*20, native.systemFontBold, 20 )
+		local score = display.newText( group, i .. ":    " ..highscoreList[i], _W/2, _H*0.1+i*30, native.systemFontBold, 27 )
 		score:setFillColor( gray )
 	end
 

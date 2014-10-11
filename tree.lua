@@ -82,7 +82,7 @@ function pack:new()
 	end
 
 	function Tree:rotateRight()
-		rotateSpeed = -6
+		rotateSpeed = -8
 		local function stopRotation()
 			rotateSpeed = 0
 		end
@@ -91,7 +91,7 @@ function pack:new()
 	end	
 
 	function Tree:rotateLeft()
-		rotateSpeed = 6
+		rotateSpeed = 8
 		local function stopRotation()
 			rotateSpeed = 0
 		end
