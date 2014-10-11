@@ -14,7 +14,7 @@ local ScoreManager = require("scoreManager")
 
 
 -- local forward references should go here --
-
+local showMenu
 
 ---------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
@@ -50,15 +50,29 @@ function scene:createScene( event )
 		score:setFillColor( gray )
 	end
 
-    local function showMenu()
-        print("button click")
+
+    local function onKeyEvent( event )
+        if ((event.keyName == "back") and (system.getInfo("platformName") == "Android")) or 
+            ((event.keyName == "q") and (system.getInfo("environment") == "simulator" )) then
+            showMenu()
+            return true
+        end
+    end
+
+
+    function showMenu()
+        Runtime:removeEventListener("key", onKeyEvent)
         display.remove( group )
         storyboard.gotoScene( "menu", {effect="slideLeft", time=400})
     end
 
+
     backButton:addEventListener( "tap", showMenu )
+    Runtime:addEventListener( "key", onKeyEvent );
 
 end
+
+
 
 
 -- Called BEFORE scene has moved onscreen:
@@ -183,6 +197,7 @@ scene:addEventListener( "overlayBegan", scene )
 
 -- "overlayEnded" event is dispatched when an overlay scene is hidden/removed
 scene:addEventListener( "overlayEnded", scene )
+
 
 ---------------------------------------------------------------------------------
 

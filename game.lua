@@ -32,6 +32,7 @@ local group
 local runRight
 local runLeft
 local showGameOver
+local onKeyEvent
 
 
 ---------------------------------------------------------------------------------
@@ -255,9 +256,15 @@ function scene:createScene( event )
         locked = true
         Runtime:removeEventListener( "touch", rightClick )
         Runtime:removeEventListener( "touch", leftClick )
-        tree:dispose()   
-        timer.cancel( countDownTimer )
-        timer.cancel( scoreTimer )
+        Runtime:removeEventListener("key", onKeyEvent)
+        tree:dispose()  
+        player:stopSprite() 
+        if (countDownTimer ~= nil) then
+            timer.cancel( countDownTimer )
+        end
+        if (scoreTimer ~= nil) then
+            timer.cancel( scoreTimer )
+        end
         Runtime:removeEventListener( "enterFrame", gameLoop )
     end
 
@@ -308,6 +315,18 @@ function scene:createScene( event )
                 gameOver:showMenu(player.score)
             end )
     end
+
+
+    function onKeyEvent( event )
+        if ((event.keyName == "back") and (system.getInfo("platformName") == "Android")) or 
+            ((event.keyName == "q") and (system.getInfo("environment") == "simulator" )) then
+            stopTimers()
+            storyboard.gotoScene( "menu" )
+            return true
+        end
+    end
+
+    Runtime:addEventListener( "key", onKeyEvent );
 
 end
 
@@ -376,9 +395,13 @@ function scene:destroyScene( event )
     end
     background:dispose()
     tree:dispose()
-    --player:stopSprite()    
-    timer.cancel( countDownTimer )
-    timer.cancel( scoreTimer )
+    --player:stopSprite()   
+    if( countDownTimer ~= nil) then 
+        timer.cancel( countDownTimer )
+    end
+    if( scoreTimer ~= nil) then 
+        timer.cancel( scoreTimer )
+    end
     Runtime:removeEventListener( "enterFrame", gameLoop )
 
     -----------------------------------------------------------------------------
@@ -442,7 +465,6 @@ scene:addEventListener( "overlayBegan", scene )
 
 -- "overlayEnded" event is dispatched when an overlay scene is hidden/removed
 scene:addEventListener( "overlayEnded", scene )
-
 
 ---------------------------------------------------------------------------------
 

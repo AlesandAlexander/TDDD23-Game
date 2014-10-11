@@ -102,12 +102,14 @@ function pack:new()
 	    --  local branch = branchGroup[i]
 	    --  branch.isRemoved = true
 	    --end
-	    for i=branchGroup.numChildren, 1, -1 do
-	    	if branchGroup[i].isSprite == true then
-		    	branchGroup[i]:stopSprite()
+	    if (branchGroup.numChildren ~= nil) then
+		    for i=branchGroup.numChildren, 1, -1 do
+		    	if branchGroup[i].isSprite == true then
+			    	branchGroup[i]:stopSprite()
+			    end
 		    end
-	    end
-		Runtime:removeEventListener( "enterFrame", gameLoop )
+			Runtime:removeEventListener( "enterFrame", gameLoop )
+		end
 	end
 
 	return branchGroup

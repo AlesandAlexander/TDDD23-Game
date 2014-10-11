@@ -55,8 +55,6 @@ function pack:new()
 		startSound()
 	end
 
-
-
 	return Player
 end
 
