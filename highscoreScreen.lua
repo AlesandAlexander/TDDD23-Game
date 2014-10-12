@@ -45,9 +45,36 @@ function scene:createScene( event )
     scoreManager = ScoreManager:new()
 	local highscoreList = scoreManager:loadScore()
 
+    local highScoreText = display.newText(group, "HighScore", _W/2, _H*0.12, native.systemFontBold, 30)
+    highScoreText:setFillColor( gray )
+
 	for i=1,#highscoreList do
-		local score = display.newText( group, i .. ":    " ..highscoreList[i], _W/2, _H*0.1+i*30, native.systemFontBold, 27 )
-		score:setFillColor( gray )
+        local params1 = 
+        {
+            parent = group,
+            text = i .. ":",     
+            x = _W*0.35,
+            y = _H*0.15+i*30,
+            width = _W*0.2,
+            font = native.systemFontBold,   
+            fontSize = 27,
+            align = "right"
+        }
+        local scorePart1 = display.newText(params1)
+        local params2 = 
+        {
+            parent = group,
+            text = highscoreList[i],     
+            x = _W*0.58,
+            y = _H*0.15+i*30,
+            width = _W*0.2,
+            font = native.systemFontBold,   
+            fontSize = 27,
+            align = "left"
+        }
+        local scorePart2 = display.newText( params2 )
+		scorePart1:setFillColor( gray )
+        scorePart2:setFillColor( gray )
 	end
 
 

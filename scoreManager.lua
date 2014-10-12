@@ -1,5 +1,5 @@
 local pack = {}
-local numEntries = 10
+local numEntries = 9
 function pack:new()
    local scoreManager = {}
    local filename = "scorefile.txt"
