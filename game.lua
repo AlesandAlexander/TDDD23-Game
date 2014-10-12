@@ -98,14 +98,21 @@ function scene:createScene( event )
     scoreText.anchorX = 1
     scoreText.anchorY = 0
     scoreText.x = _W-10
-    scoreText.y = 10
+    scoreText.y = 0
     scoreText:setFillColor(  )
+
+    local scorebg = display.newRoundedRect( _W, 0, 260, 70, 5 )
+    scorebg.strokeWidth = 6
+    scorebg:setFillColor(255,255,0)
+    scorebg:setStrokeColor()
+
 
 
     group:insert(background)
     group:insert(tree)
     group:insert(player)
     group:insert(laser)
+    group:insert(scorebg)
     group:insert(scoreText)
     group:insert(timerGraphics)
     group:insert(hands)
