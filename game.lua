@@ -94,23 +94,19 @@ function scene:createScene( event )
     laser = Laser:new()
     laser:setY(player.y+time*12-40)
 
-    local scoreText = display.newEmbossedText( { text="Score:", fontSize=25, align="center", x=_W*0.78, y=20 } )
+    local scoreText = display.newText( { text="Score: " .. player.score, fontSize=25, align="right", font=native.systemFontBold, width = 200, x=_W*0.80, y=20 } )
+    scoreText.anchorX = 1
+    scoreText.anchorY = 0
+    scoreText.x = _W-10
+    scoreText.y = 10
     scoreText:setFillColor(  )
-    local scoreCounter = display.newEmbossedText( { text=player.score, fontSize=25, align="center", x=_W*0.92, y=20 } )
-    scoreCounter:setFillColor(  )
 
-    local color = 
-    {
-        highlight = { r=1, g=1, b=1 },
-        shadow = { r=0, g=0, b=0 }
-    }
-    scoreCounter:setEmbossColor( color )
 
     group:insert(background)
     group:insert(tree)
     group:insert(player)
     group:insert(laser)
-    group:insert(scoreCounter)
+    group:insert(scoreText)
     group:insert(timerGraphics)
     group:insert(hands)
     group:insert(rightButton)
@@ -250,7 +246,7 @@ function scene:createScene( event )
 
     local function increaseScore()
         player.score = player.score + 1
-        scoreCounter.text = player.score
+        scoreText.text = "Score: " .. player.score
     end
 
 
