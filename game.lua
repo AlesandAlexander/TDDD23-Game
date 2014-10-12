@@ -59,6 +59,8 @@ function scene:createScene( event )
     local speedSound = audio.loadSound( "sound/bzzumm.mp3" )
     local crashSound = audio.loadSound( "sound/crash.mp3" )
     local heheSound = audio.loadSound( "sound/hehe.mp3" )
+    local deathSound = audio.loadSound( "sound/death.mp3" )
+
 
     -- 0 = none, 1 = left, 2 = right
     local nextAction = 0
@@ -315,7 +317,6 @@ function scene:createScene( event )
         group:insert(gameOver)
         scoreManager:saveScore(player.score)
 
-        local deathSound = audio.loadSound( "sound/death.mp3" )
         local deathSoundChannel = audio.play( deathSound )
         audio.setVolume( 1, { channel=deathSoundChannel } ) 
         timer.performWithDelay( 1300,         
