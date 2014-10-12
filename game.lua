@@ -8,6 +8,7 @@ local Background = require("background")
 local ScoreManager = require("scoreManager")
 local GameOver = require("gameOver")
 local Hands = require("hands")
+local CountDownTimer = require("countDownTimer")
 
 --physics.setDrawMode( "hybrid" )
 
@@ -77,14 +78,22 @@ function scene:createScene( event )
     rightButton.alpha = 0.01
     gameStarter.alpha = 0.01
     local time = 15
-    local timeGraphic = display.newText( "Time: " .. time, _W-50, 20, native.systemFontBold, 25)
-    timeGraphic:setFillColor()
+
+    local timerGraphics = CountDownTimer:new()
+    timerGraphics:setTime(time)
+    timerGraphics.x = _W-50
+    timerGraphics.y = 250
+
+    --local timeGraphic = display.newText( "Time: " .. time, _W-50, 20, native.systemFontBold, 25)
+    --timeGraphic:setFillColor()
 
     local scoreManager = ScoreManager:new()
 
     hands = Hands:new()
     player = Player:new()
     laser = Laser:new()
+    laser:setY(player.y+time*12-40)
+
     local scoreCounter = display.newEmbossedText( { text=player.score, fontSize=30, align="center", x=_W/2, y=20 } )
     local color = 
     {
@@ -95,10 +104,10 @@ function scene:createScene( event )
 
     group:insert(background)
     group:insert(tree)
-    group:insert(timeGraphic)
     group:insert(player)
     group:insert(laser)
     group:insert(scoreCounter)
+    group:insert(timerGraphics)
     group:insert(hands)
     group:insert(rightButton)
     group:insert(leftButton)
@@ -160,7 +169,7 @@ function scene:createScene( event )
         if time < 0 then
             time = 0
         end
-        timeGraphic.text = "Time: " .. time
+        timerGraphics:setTime(time)
         laser:setY(player.y+time*12-40)
         if (time <= 0 and (not gameOver)) then
             gameOver = true

@@ -7,9 +7,31 @@ function pack:new()
 
     local Group = display.newGroup( )
 
+    local crashGroup = display.newGroup( )
+    Group:insert(crashGroup)
+
+    local flasher = display.newRect( _W/2, _H/2, _W+500, _H+500 )
+    flasher:setFillColor( 1,0,0 )
+    flasher.alpha = 0
+    Group:insert(flasher)
+
+
+    local function flash()
+
+        local function flashOut()
+            transition.to( flasher, {alpha = 0, time=200, transition=easing.InOutBack} )
+        end
+
+        local function flashIn()
+            transition.to( flasher, {alpha = 0.7, time=200, onComplete=flashOut, transition=easing.InOutBack} )
+        end
+
+        flashIn()
+    end
+
+
     function Group:explode(xPos, yPos)
-        local crashGroup = display.newGroup( )
-        Group:insert(crashGroup)
+        flash()
         local part1 = display.newImageRect( crashGroup, "images/part1.png", 56, 90 )
         part1.x = xPos
         part1.y = yPos
