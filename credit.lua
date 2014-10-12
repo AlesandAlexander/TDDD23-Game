@@ -1,7 +1,7 @@
 local storyboard = require( "storyboard" )
 scene = storyboard.newScene()
+local ScoreManager = require("scoreManager")
 
-display.setStatusBar( display.HiddenStatusBar )
 
 ----------------------------------------------------------------------------------
 -- 
@@ -14,7 +14,7 @@ display.setStatusBar( display.HiddenStatusBar )
 
 
 -- local forward references should go here --
-
+local onKeyEvent
 
 ---------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
@@ -26,50 +26,48 @@ function scene:createScene( event )
     local group = group
 
     local background = display.newImageRect( group, "images/bg.png", _W*9, _H )
-    background.x = _W/2
+    background.x = _W/2+_W
     background.y = _H/2
 
-    local playButton = display.newRoundedRect( group, _W/2, _H*0.6, _W*0.8, _H/12, 5 )
-    playButton.strokeWidth = 3
-    playButton:setFillColor(255,255,0)
-    playButton:setStrokeColor()
-    local playButtonText = display.newText( group, "Play", _W/2, _H*0.6, native.systemFontBold, 35 )
-    playButtonText:setFillColor()
+    local scoreBackground = display.newRoundedRect( group, _W/2, _H*0.45, 250, 300, 5 )
+    scoreBackground.strokeWidth = 3
+    scoreBackground:setFillColor(255,255,0)
+    scoreBackground:setStrokeColor()
+    
+    local creditText = display.newEmbossedText( { parent=group, text="Credits", fontSize=35, align="center", x=_W/2, y=_H*0.3 } )
+    creditText:setFillColor(  )
+    local creditAlexander = display.newEmbossedText( { parent=group, text="Alexander Alesand", fontSize=25, align="center", x=_W/2, y=_H*0.45 } )
+    creditAlexander:setFillColor(  )
+    local creditGustav = display.newEmbossedText( { parent=group, text="Gustav Enblom", fontSize=25, align="center", x=_W/2, y=_H*0.55 } )
+    creditGustav:setFillColor(  )
 
-    local highscoreButton = display.newRoundedRect( group, _W/2, _H*0.72, _W*0.8, _H/12, 5 )
-    highscoreButton.strokeWidth = 3
-    highscoreButton:setFillColor(255,255,0)
-    highscoreButton:setStrokeColor()
-    local highscoreButtonText = display.newText( group, "Highscore", _W/2, _H*0.72, native.systemFontBold, 35 )
-    highscoreButtonText:setFillColor()
+    local backButton = display.newRoundedRect( group, _W/2, _H*0.8, _W*0.8, _H/12, 5 )
+    backButton.strokeWidth = 3
+    backButton:setFillColor(255,255,0)
+    backButton:setStrokeColor()
+    local backButtonText = display.newText( group, "Back", _W/2, _H*0.8, native.systemFontBold, 35 )
+    backButtonText:setFillColor()
 
-    local creditButton = display.newRoundedRect( group, _W/2, _H*0.84, _W*0.8, _H/12, 5 )
-    creditButton.strokeWidth = 3
-    creditButton:setFillColor(255,255,0)
-    creditButton:setStrokeColor()
-    local creditButtonText = display.newText( group, "Credit", _W/2, _H*0.84, native.systemFontBold, 35 )
-    creditButtonText:setFillColor()
 
-    local function startGame()
+    local function showMenu()
         display.remove( group )
-        storyboard.gotoScene( "game", {effect="slideLeft", time=400})
+        storyboard.gotoScene( "menu", {effect="slideLeft", time=400})
     end
 
-    local function showHighscore()
-        display.remove( group )
-        storyboard.gotoScene( "highscoreScreen", {effect="slideRight", time=400})
+    function onKeyEvent( event )
+        if ((event.keyName == "back") and (system.getInfo("platformName") == "Android")) or 
+            ((event.keyName == "q") and (system.getInfo("environment") == "simulator" )) then
+            showMenu()
+            return true
+        end
     end
 
-    local function showCredit()
-        display.remove( group )
-        storyboard.gotoScene( "credit", {effect="slideRight", time=400})
-    end
 
-    playButton:addEventListener( "tap", startGame )
-    highscoreButton:addEventListener( "tap", showHighscore )
-    creditButton:addEventListener( "tap", showCredit )
+    backButton:addEventListener( "tap", showMenu )
 
 end
+
+
 
 
 -- Called BEFORE scene has moved onscreen:
@@ -88,7 +86,7 @@ end
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene( event )
     local group = self.view
-    print("Game removed")
+    Runtime:addEventListener( "key", onKeyEvent );
 
     -----------------------------------------------------------------------------
 
@@ -128,6 +126,7 @@ end
 -- Called prior to the removal of scene's "view" (display group)
 function scene:destroyScene( event )
     local group = self.view
+    Runtime:removeEventListener("key", onKeyEvent)
 
     -----------------------------------------------------------------------------
 
@@ -196,6 +195,7 @@ scene:addEventListener( "overlayBegan", scene )
 
 -- "overlayEnded" event is dispatched when an overlay scene is hidden/removed
 scene:addEventListener( "overlayEnded", scene )
+
 
 ---------------------------------------------------------------------------------
 
