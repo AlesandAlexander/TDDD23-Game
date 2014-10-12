@@ -6,11 +6,6 @@ function pack:new()
 	local myImageSheet = graphics.newImageSheet( "images/squirrel.png", sheetInfo:getSheet() )
 	local soundChannel
 
-	--local sheetData = { width=43, height=64, numFrames=9, sheetContentWidth=129, sheetContentHeight=192 }
-	--local sheet = graphics.newImageSheet( "ferret.png", sheetData )
-	--local sequenceData = {name="normal", frames={7,8,9}, time=800}
-
-	--local Player = display.newSprite( sheet, sequenceData )
 	local Player = display.newSprite( myImageSheet , {frames={1, 2, 3}, time=270, loopDirection="bounce"} )
 
 	Player:scale( 0.65, 0.65 )

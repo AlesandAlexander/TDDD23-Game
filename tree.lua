@@ -3,6 +3,9 @@ local Manager = require("branchManager")
 
 function pack:new()
 
+    local turnSound = audio.loadSound( "sound/swosh.mp3" )
+
+
 	local Tree = display.newGroup( )
 	local trunk = display.newGroup( )
 	local branchManager = Manager:new()
@@ -93,6 +96,8 @@ function pack:new()
 		end
 		timer.performWithDelay( rotateTime, stopRotation)
 		branchManager:rotateRight()
+		local turnSoundChannel = audio.play( turnSound )
+        audio.setVolume( 0.2, { channel=turnSoundChannel } ) 
 	end	
 
 	function Tree:rotateLeft()
@@ -102,6 +107,8 @@ function pack:new()
 		end
 		timer.performWithDelay( rotateTime, stopRotation)
 		branchManager:rotateLeft()
+		local turnSoundChannel = audio.play( turnSound )
+        audio.setVolume( 0.2, { channel=turnSoundChannel } ) 
 	end	
 
 	function Tree:start(spd, diff)

@@ -35,6 +35,7 @@ local showGameOver
 local onKeyEvent
 
 
+
 ---------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
 ---------------------------------------------------------------------------------
@@ -57,7 +58,6 @@ function scene:createScene( event )
     local speedSound = audio.loadSound( "sound/bzzumm.mp3" )
     local crashSound = audio.loadSound( "sound/crash.mp3" )
     local heheSound = audio.loadSound( "sound/hehe.mp3" )
-
 
     -- 0 = none, 1 = left, 2 = right
     local nextAction = 0
@@ -168,6 +168,7 @@ function scene:createScene( event )
             showDeath()
         elseif (time == 2) then
             local heheSoundChannel = audio.play( heheSound )
+            audio.setVolume( 1, { channel=heheSoundChannel } ) 
         end
     end
 
@@ -208,12 +209,14 @@ function scene:createScene( event )
         if (event.phase == "began") then
             if event.other.type == "friend" then
                 local speedSoundChannel = audio.play( speedSound )
+                audio.setVolume( 0.7, { channel=speedSoundChannel } ) 
                 display.remove( event.other )
                 event.other.isRemoved = true
                 time = time + 10
                 tree:setSpeed(tree:getSpeed() + 1)
             elseif (event.other.isRemoved ~= true) then
                 local crashSoundChannel = audio.play( crashSound )
+                audio.setVolume( 1, { channel=crashSoundChannel } ) 
                 local direction = math.random(0, 1)
                 local speed = math.random(30, 40) * tree:getSpeed()
                 if (direction > 0.5) then
@@ -301,6 +304,7 @@ function scene:createScene( event )
 
         local deathSound = audio.loadSound( "sound/death.mp3" )
         local deathSoundChannel = audio.play( deathSound )
+        audio.setVolume( 1, { channel=deathSoundChannel } ) 
         timer.performWithDelay( 1300,         
             function() 
                 stopTimers()
