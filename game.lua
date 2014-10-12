@@ -94,7 +94,11 @@ function scene:createScene( event )
     laser = Laser:new()
     laser:setY(player.y+time*12-40)
 
-    local scoreCounter = display.newEmbossedText( { text=player.score, fontSize=30, align="center", x=_W/2, y=20 } )
+    local scoreText = display.newEmbossedText( { text="Score:", fontSize=25, align="center", x=_W*0.78, y=20 } )
+    scoreText:setFillColor(  )
+    local scoreCounter = display.newEmbossedText( { text=player.score, fontSize=25, align="center", x=_W*0.92, y=20 } )
+    scoreCounter:setFillColor(  )
+
     local color = 
     {
         highlight = { r=1, g=1, b=1 },
@@ -173,7 +177,6 @@ function scene:createScene( event )
         laser:setY(player.y+time*12-40)
         if (time <= 0 and (not gameOver)) then
             gameOver = true
-            scoreManager:saveScore(player.score)
             showDeath()
         elseif (time == 2) then
             local heheSoundChannel = audio.play( heheSound )
@@ -304,14 +307,10 @@ function scene:createScene( event )
     despawnerLeft.collision = onDespawnerCollision
     despawnerLeft:addEventListener( "collision", despawnerLeft )
 
-    function endGame()
-        scoreManager:saveScore(player.score)
-        storyboard.gotoScene("menu")
-    end
-
     function showDeath()
         local gameOver = GameOver:new()
         group:insert(gameOver)
+        scoreManager:saveScore(player.score)
 
         local deathSound = audio.loadSound( "sound/death.mp3" )
         local deathSoundChannel = audio.play( deathSound )
