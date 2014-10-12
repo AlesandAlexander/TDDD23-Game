@@ -221,6 +221,7 @@ function scene:createScene( event )
                 audio.setVolume( 0.7, { channel=speedSoundChannel } ) 
                 display.remove( event.other )
                 event.other.isRemoved = true
+                timerGraphics:flashGreen()
                 time = time + 10
                 tree:setSpeed(tree:getSpeed() + 1)
             elseif (event.other.isRemoved ~= true) then
@@ -236,6 +237,7 @@ function scene:createScene( event )
                 event.other.angularVelocity = math.random(-1000, 1000)
                 event.other.isRemoved = true
                 notifyHit()
+                timerGraphics:flashRed()
                 time = time - 5
             end
             updateTime()

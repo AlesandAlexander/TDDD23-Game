@@ -16,9 +16,21 @@ function pack:new()
 	bg.rotation = 100
 	bg:scale(0.4, 0.4)
 
+	local redFlasher = display.newImageRect( group, "images/timebgred.png", 200, 200 )
+	redFlasher.rotation = bg.rotation
+	redFlasher:scale(0.4, 0.4)
+	redFlasher.alpha = 0
+
+	local greenFlasher = display.newImageRect( group, "images/timebggreen.png", 200, 200 )
+	greenFlasher.rotation = bg.rotation
+	greenFlasher:scale(0.4, 0.4)
+	greenFlasher.alpha = 0
+
 	local timeText = display.newText( "", 0, 0, native.systemFontBold, 32)
 	timeText:setFillColor()
 	group:insert(timeText)
+
+
 
     function TimeGraphics:setTime(time)
     	timeText.text = time
@@ -30,6 +42,29 @@ function pack:new()
 
     function TimeGraphics:hide()
     	TimeGraphics.isVisible = false
+    end
+
+    function TimeGraphics:flashRed()
+		local function flashOut()
+			transition.to( redFlasher, {alpha = 0, time=500, transition=easing.InBack} )
+		end
+
+		local function flashIn()
+			transition.to( redFlasher, {alpha = 1, time=200, onComplete=flashOut, transition=easing.OutBack} )
+		end
+		flashIn()
+    end
+
+    function TimeGraphics:flashGreen()
+		local function flashOut()
+			transition.to( greenFlasher, {alpha = 0, time=500, transition=easing.InBack} )
+		end
+
+		local function flashIn()
+			transition.to( greenFlasher, {alpha = 1, time=200, onComplete=flashOut, transition=easing.OutBack} )
+		end
+
+		flashIn()
     end
 
 	local function shake()
