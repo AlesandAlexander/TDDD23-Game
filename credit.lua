@@ -29,16 +29,16 @@ function scene:createScene( event )
     background.x = _W/2+_W
     background.y = _H/2
 
-    local scoreBackground = display.newRoundedRect( group, _W/2, _H*0.45, 270, 300, 5 )
+    local scoreBackground = display.newRoundedRect( group, _W/2, _H*0.45, 290, 300, 5 )
     scoreBackground.strokeWidth = 3
     scoreBackground:setFillColor(255,255,0)
     scoreBackground:setStrokeColor()
     
-    local creditText = display.newEmbossedText( { parent=group, text="Credits", fontSize=35, align="center", x=_W/2, y=_H*0.3 } )
+    local creditText = display.newEmbossedText( { parent=group, text="Credits", fontSize=35, align="center", x=_W/2, y=_H*0.3, font=native.systemFontBold } )
     creditText:setFillColor(  )
-    local info = display.newEmbossedText( { parent=group, text="code, graphics, sound", fontSize=23, align="center", x=_W/2, y=_H*0.37 } )
+    local info = display.newEmbossedText( { parent=group, text="Code, Graphics, Sound", fontSize=23, align="center", x=_W/2, y=_H*0.37, font=native.systemFontBold } )
     info:setFillColor(  )
-    local creditAlexander = display.newEmbossedText( { parent=group, text="Alexander Alesand", fontSize=23, align="center", x=_W/2, y=_H*0.45 } )
+    local creditAlexander = display.newEmbossedText( { parent=group, text="Alexander Alesand", fontSize=23, align="center", x=_W/2, y=_H*0.5 } )
     creditAlexander:setFillColor(  )
     local creditGustav = display.newEmbossedText( { parent=group, text="Gustav Enblom", fontSize=23, align="center", x=_W/2, y=_H*0.55 } )
     creditGustav:setFillColor(  )
