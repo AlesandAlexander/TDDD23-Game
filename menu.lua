@@ -29,6 +29,12 @@ function scene:createScene( event )
     background.x = _W/2
     background.y = -background.height/2+_H
 
+    local title = display.newImageRect( group, "images/title.png", 826, 555 )
+    title:scale(0.43,0.43)
+    title.x = _W/2
+    title.y = 160
+
+
     local playButton = display.newRoundedRect( group, _W/2, _H*0.6, _W*0.8, _H/12, 5 )
     playButton.strokeWidth = 3
     playButton:setFillColor(255,255,0)

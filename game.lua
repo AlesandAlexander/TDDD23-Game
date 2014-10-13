@@ -282,6 +282,7 @@ function scene:createScene( event )
         Runtime:removeEventListener("key", onKeyEvent)
         tree:dispose()  
         player:stopSprite() 
+        background:stop()
         if (countDownTimer ~= nil) then
             timer.cancel( countDownTimer )
         end

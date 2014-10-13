@@ -22,9 +22,9 @@ scene = storyboard.newScene()
 function scene:createScene( event )
     group = self.view
 
-    local background = display.newImageRect( group, "images/bg.png", _W*9, _H )
-    background.x = _W/2
-    background.y = _H/2
+    local background = display.newImageRect( group, "images/bg.png", _W*9, _W*9 )
+    background.x = -_W/2
+    background.y = -background.height/2+_H
 
     local function startGame()
         storyboard.gotoScene( "game" )    

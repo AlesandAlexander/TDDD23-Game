@@ -57,6 +57,10 @@ function pack:new()
 		Runtime:addEventListener( "enterFrame", scrollVertical )
 	end
 
+	function image:stop()
+		Runtime:removeEventListener( "enterFrame", scrollVertical )
+	end
+
 
 	Runtime:addEventListener( "enterFrame", scroll )
 	return image
