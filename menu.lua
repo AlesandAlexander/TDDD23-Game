@@ -25,9 +25,9 @@ function scene:createScene( event )
     group = self.view
     local group = group
 
-    local background = display.newImageRect( group, "images/bg.png", _W*9, _H )
+    local background = display.newImageRect( group, "images/bg.png", _W*9, _W*9 )
     background.x = _W/2
-    background.y = _H/2
+    background.y = -background.height/2+_H
 
     local playButton = display.newRoundedRect( group, _W/2, _H*0.6, _W*0.8, _H/12, 5 )
     playButton.strokeWidth = 3

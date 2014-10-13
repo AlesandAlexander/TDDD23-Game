@@ -2,9 +2,10 @@ local pack = {}
 
 function pack:new()
 
-	local image = display.newImageRect( "images/bg.png", _W*9, _H )
+	local image = display.newImageRect( "images/bg.png", _W*9, _W*9 )
 	image.x = _W*4
-	image.y =_H/2
+	image.y = -image.height/2+_H
+	
 
 	image.anchorX=1
 	local rotationSpeed = 70
@@ -38,14 +39,26 @@ function pack:new()
 		end
 	end
 
-	Runtime:addEventListener( "enterFrame", scroll )
+	local function scrollVertical(event)
+		if (image.y < image.height/2) then
+			image.y = image.y + 0.3
+		end
+	end
 
 	function image:dispose()
+		Runtime:removeEventListener( "enterFrame", scrollVertical )
 		Runtime:removeEventListener( "enterFrame", scroll )
 		image:removeSelf( )
 		image = nil
 	end
 
+
+	function image:start()
+		Runtime:addEventListener( "enterFrame", scrollVertical )
+	end
+
+
+	Runtime:addEventListener( "enterFrame", scroll )
 	return image
 
 end

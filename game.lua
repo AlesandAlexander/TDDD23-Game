@@ -263,6 +263,7 @@ function scene:createScene( event )
         if (event.phase == "began") then 
             tree:start(10, 20) 
             player:start()
+            background:start()
             countDownTimer = timer.performWithDelay( 1000, changeTime )
             scoreTimer = timer.performWithDelay( 1000, increaseScore, 0)
             display.remove( gameStarter )
