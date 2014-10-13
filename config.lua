@@ -4,6 +4,6 @@ application =
     {
             width = 360,
             height = 640,
-            scale = "letterBox"
+            scale = "zoomStretch"
     }
 }
