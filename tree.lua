@@ -119,6 +119,7 @@ function pack:new()
 	end
 
 	function Tree:setSpeed(spd)
+		spd= 20
 		speed = spd
 		branchManager:setSpeed(spd)
 	end

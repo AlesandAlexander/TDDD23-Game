@@ -9,7 +9,7 @@ function pack:new()
 	local Player = display.newSprite( myImageSheet , {frames={1, 2, 3}, time=270, loopDirection="bounce"} )
 
 	Player:scale( 0.65, 0.65 )
-	Player.score = 0
+	Player.score = 130
 
 	Player.x = _W/2
 	Player.y = _H*0.75

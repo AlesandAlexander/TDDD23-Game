@@ -4,7 +4,7 @@ function pack:new()
 
 	local image = display.newImageRect( "images/bg.png", _W*9, _W*9 )
 	image.x = _W*4
-	image.y = -image.height/2+_H
+	image.y = -image.height/2+_H+2.2*_H
 	
 
 	image.anchorX=1
