@@ -1,8 +1,6 @@
 local pack = {}
 local HintSquirrel = require("hintSquirrel")
 local storyboard = require( "storyboard" )
-local ScoreManager = require("scoreManager")
-
 
 
 function pack:new()
@@ -74,11 +72,6 @@ function pack:new()
     end
 
     function Group:showMenu(score)
-
-        local scoreManager = ScoreManager:new()
-        scoreManager:saveScore(score)
-
-
         local transitionGroup = display.newGroup( )
         Group:insert(transitionGroup)
         transitionGroup.y = 100
