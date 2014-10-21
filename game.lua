@@ -5,7 +5,6 @@ local Tree = require("tree")
 local Player = require("player")
 local Laser = require("laser")
 local Background = require("background")
-local ScoreManager = require("scoreManager")
 local GameOver = require("gameOver")
 local Hands = require("hands")
 local CountDownTimer = require("countDownTimer")
@@ -89,8 +88,6 @@ function scene:createScene( event )
     --local timeGraphic = display.newText( "Time: " .. time, _W-50, 20, native.systemFontBold, 25)
     --timeGraphic:setFillColor()
 
-    local scoreManager = ScoreManager:new()
-
     hands = Hands:new()
     player = Player:new()
     laser = Laser:new()
@@ -99,15 +96,14 @@ function scene:createScene( event )
     local scoreText = display.newText( { text="Score: " .. player.score, fontSize=25, align="right", font=native.systemFontBold, width = 200, x=_W*0.80, y=20 } )
     scoreText.anchorX = 1
     scoreText.anchorY = 0
-    scoreText.x = _W-10
-    scoreText.y = 0
+    scoreText.x = _W-10+2
+    scoreText.y = -2
     scoreText:setFillColor(  )
 
     local scorebg = display.newRoundedRect( _W, 0, 260, 70, 5 )
     scorebg.strokeWidth = 6
     scorebg:setFillColor(255,255,0)
     scorebg:setStrokeColor()
-
 
 
     group:insert(background)
@@ -317,7 +313,6 @@ function scene:createScene( event )
     function showDeath()
         local gameOver = GameOver:new()
         group:insert(gameOver)
-        scoreManager:saveScore(player.score)
 
         local deathSoundChannel = audio.play( deathSound )
         audio.setVolume( 1, { channel=deathSoundChannel } ) 

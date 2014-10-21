@@ -11,7 +11,7 @@ function pack:new()
 	local bubble = display.newImageRect( Hint, "images/bubble.png", 350, 350 )
 	bubble.x = 75
 	bubble.y = -95
-	bubble:scale( 0.5, 0.4 )
+	bubble:scale( 0.5, 0.45 )
 
 	local textBank = 
 	{
@@ -31,8 +31,8 @@ function pack:new()
 	    parent = Hint,
 	    text = textBank[math.random(1, #textBank)],     
 	    x = 70,
-	    y = -75,
-	    width = bubble.width*0.4-30,
+	    y = -90,
+	    width = bubble.width*0.4-20,
 	    height = bubble.height*0.4-30,
 	    font = native.systemFont,   
 	    fontSize = 18,

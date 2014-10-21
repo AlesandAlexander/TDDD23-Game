@@ -1,7 +1,6 @@
 local storyboard = require( "storyboard" )
 scene = storyboard.newScene()
 
-display.setStatusBar( display.HiddenStatusBar )
 
 ----------------------------------------------------------------------------------
 -- 
@@ -14,7 +13,7 @@ display.setStatusBar( display.HiddenStatusBar )
 
 
 -- local forward references should go here --
-
+local onKeyEvent
 
 ---------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
@@ -26,70 +25,53 @@ function scene:createScene( event )
     local group = group
 
     local background = display.newImageRect( group, "images/bg.png", _W*9, _W*9 )
-    background.x = _W/2
+    background.x = _W/2+_W
     background.y = -background.height/2+_H
 
-    local title = display.newImageRect( group, "images/title.png", 826, 555 )
-    title:scale(0.43,0.43)
-    title.x = _W/2
-    title.y = 160
+    local donateBackground = display.newRoundedRect( group, _W/2, _H*0.40, 290, 420, 5 )
+    donateBackground.strokeWidth = 3
+    donateBackground:setFillColor(255,255,0)
+    donateBackground:setStrokeColor()
 
-    local dist = 70
+    local bitcoinQr = display.newImageRect( group, "images/bitcoin.png", 500, 500 )
+    bitcoinQr:scale( 0.45, 0.45 )
+    bitcoinQr.x = _W/2
+    bitcoinQr.y = donateBackground.y+70
 
-    local playButton = display.newRoundedRect( group, _W/2, _H*0.55, _W*0.8, _H/12, 5 )
-    playButton.strokeWidth = 3
-    playButton:setFillColor(255,255,0)
-    playButton:setStrokeColor()
-    local playButtonText = display.newText( group, "Play", _W/2, _H*0.55, native.systemFontBold, 35 )
-    playButtonText:setFillColor()
+    local creditText = display.newEmbossedText( { parent=group, text="Donate bitcoin by scanning the QR code below or tap it to open your local bitcoin app.", fontSize=22, align="center", x=_W/2, y=_H*0.19, width = 280, font=native.systemFont } )
+    creditText:setFillColor(  )
 
-    local highscoreButton = display.newRoundedRect( group, _W/2, playButton.y+dist, _W*0.8, _H/12, 5 )
-    highscoreButton.strokeWidth = 3
-    highscoreButton:setFillColor(255,255,0)
-    highscoreButton:setStrokeColor()
-    local highscoreButtonText = display.newText( group, "Highscore", _W/2, playButton.y+dist, native.systemFontBold, 35 )
-    highscoreButtonText:setFillColor()
+    local backButton = display.newRoundedRect( group, _W/2, _H*0.8, _W*0.8, _H/12, 5 )
+    backButton.strokeWidth = 3
+    backButton:setFillColor(255,255,0)
+    backButton:setStrokeColor()
+    local backButtonText = display.newText( group, "Back", _W/2, _H*0.8, native.systemFontBold, 35 )
+    backButtonText:setFillColor()
 
-    local creditButton = display.newRoundedRect( group, _W/2, highscoreButton.y+dist, _W*0.8, _H/12, 5 )
-    creditButton.strokeWidth = 3
-    creditButton:setFillColor(255,255,0)
-    creditButton:setStrokeColor()
-    local creditButtonText = display.newText( group, "Credits", _W/2, highscoreButton.y+dist, native.systemFontBold, 35 )
-    creditButtonText:setFillColor()
 
-    local donateButton = display.newRoundedRect( group, _W/2, creditButton.y+dist, _W*0.8, _H/12, 5 )
-    donateButton.strokeWidth = 3
-    donateButton:setFillColor(255,255,0)
-    donateButton:setStrokeColor()
-    local donateButtonText = display.newText( group, "Donate", _W/2, creditButton.y+dist, native.systemFontBold, 35 )
-    donateButtonText:setFillColor()
-
-    local function startGame()
+    local function showMenu()
         display.remove( group )
-        storyboard.gotoScene( "game", {effect="slideLeft", time=400})
+        storyboard.gotoScene( "menu", {effect="slideLeft", time=400})
     end
 
-    local function showHighscore()
-        display.remove( group )
-        storyboard.gotoScene( "highscoreScreen", {effect="slideRight", time=400})
+    function onKeyEvent( event )
+        if ((event.keyName == "back") and (system.getInfo("platformName") == "Android")) or 
+            ((event.keyName == "q") and (system.getInfo("environment") == "simulator" )) then
+            showMenu()
+            return true
+        end
     end
 
-    local function showCredit()
-        display.remove( group )
-        storyboard.gotoScene( "credit", {effect="slideRight", time=400})
+    function donateBitcoin()
+		system.openURL( "bitcoin:1Ah8zgpBDystRbcMnfZrUKdr5wcbiQJQk9" )
     end
 
-    local function showDonate()
-        display.remove( group )
-        storyboard.gotoScene( "donate", {effect="slideRight", time=400})
-    end
-
-    playButton:addEventListener( "tap", startGame )
-    highscoreButton:addEventListener( "tap", showHighscore )
-    creditButton:addEventListener( "tap", showCredit )
-    donateButton:addEventListener( "tap", showDonate )
+    bitcoinQr:addEventListener( "tap", donateBitcoin )
+    backButton:addEventListener( "tap", showMenu )
 
 end
+
+
 
 
 -- Called BEFORE scene has moved onscreen:
@@ -108,7 +90,7 @@ end
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene( event )
     local group = self.view
-    print("Game removed")
+    Runtime:addEventListener( "key", onKeyEvent );
 
     -----------------------------------------------------------------------------
 
@@ -148,6 +130,7 @@ end
 -- Called prior to the removal of scene's "view" (display group)
 function scene:destroyScene( event )
     local group = self.view
+    Runtime:removeEventListener("key", onKeyEvent)
 
     -----------------------------------------------------------------------------
 
@@ -216,6 +199,7 @@ scene:addEventListener( "overlayBegan", scene )
 
 -- "overlayEnded" event is dispatched when an overlay scene is hidden/removed
 scene:addEventListener( "overlayEnded", scene )
+
 
 ---------------------------------------------------------------------------------
 
