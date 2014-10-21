@@ -78,8 +78,8 @@ function scene:createScene( event )
     leftButton.alpha = 0.01
     rightButton.alpha = 0.01
     gameStarter.alpha = 0.01
-    local time = 60
-
+    local time = 15
+    
     local timerGraphics = CountDownTimer:new()
     timerGraphics:setTime(time)
     timerGraphics.x = _W-50
